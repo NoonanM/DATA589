@@ -1,0 +1,79 @@
+---
+title: "Course lectures for DATA 589: Spatial Statistics"
+output: html_document
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Lecture slides and recordings for DATA 589: Spatial Statistics, 2023.
+
+<br />
+
+***
+# Working with Spatial Data
+***
+<br />
+
+#### Lecture 01 - Course Intro
+
+<!-- <a href="Lectures/01_Course_Intro.pdf" target="_blank">Slides.</a> -->
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 02 - Working with Spatial Data
+
+<!-- <a href="Lectures/02_Scope_of_Evol_Ecol.pdf" target="_blank">Slides.</a> -->
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+***
+# Point Processes
+***
+<br />
+
+#### Lecture 03 - Point Processes 1
+
+<!-- <a href="Lectures/02_Scope_of_Evol_Ecol.pdf" target="_blank">Slides.</a> -->
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 04 - Point Processes 2
+
+<!-- <a href="Lectures/03_Selection_Adaptation.pdf" target="_blank">Slides.</a> -->
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 05 - Point Processes 3
+
+<!-- <a href="Lectures/03_Selection_Adaptation.pdf" target="_blank">Slides.</a> -->
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+<br />
+
+***
+# Spatial Autocorrelation
+***
+<br />
+
+#### Lecture 06 - Spatial Autocorrelation 1: Variograms
+
+<a href="Lectures/06_Spatial_Autocorrelation.pdf" target="_blank">Slides.</a>
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 07 - Spatial Autocorrelation 2: Kriging
+
+<a href="Lectures/07_Kriging.pdf" target="_blank">Slides.</a>
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 08 - Spatial Autocorrelation 3: Kriging with covariates
+
+<a href="Lectures/08_coKriging.pdf" target="_blank">Slides.</a>
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+<br />

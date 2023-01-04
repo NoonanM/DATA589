@@ -1,0 +1,99 @@
+---
+title: "Course website for DATA 589: Spatial Statistics"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Course Description
+
+Introductory course on spatial statistics focused on combining data with models to generate mechanistic descriptions of spatial patterns. Beginning from a discussion about the importance spatially collected data, the course teaches methods for modelling spatial data for two routinely occurring situations 1) when the locations of points are the variable of interest, and 2) when the locations are an arbitrary artefact of the sampling design. Emphasis is placed on understanding and interpreting the analyses in an applied context.
+
+## Course Objectives
+
+This course combines lectures on theory and concepts with time practicing statistical tools in `R` based software packages. The course is designed to equip students with the tools and knowledge they need to perform a variety of analyses that can model common features of spatial data. For each topic, there will be a core lecture module and a lab based practical module. With the lectures, students will learn the theory behind core modelling tools including point process models, variograms, Kriging, co-Kriging- regression-Kriging, and regression with correlated errors, while the lab modules are intended to provide a pathway that students can follow over the longer term as their skills develop. 
+
+
+Learning Outcomes:
+
+* Assess spatial point data for distinctive patterns
+* Fit point process models via maximum likelihood
+*	Calculate empirical variograms from spatially collected data
+*	Model spatial autocorrelation structures
+*	Predict from spatial autocorrelation models
+*	Handle non-independence in spatial data
+*	Link questions, analyses, and studying design
+
+## Course Format
+The course is divided into core lectures and lab-based practicals.
+
+__Lectures__: Lectures will cover the core concepts of the course. Lecture slides will be posted on the course website prior to the lecture. Students are encouraged to take notes, and to ask questions in the lectures. Lectures will also be given in Zoom and a link to the lecture is available here and in the Canvas navigation sidebar. All lectures will be recorded and made available to the students (subject to any unforseen technical issues). Questions will be used throughout the lectures to reinforce key concepts. No grades are assigned to these questions, but and students are encouraged to answer these to the best of their ability in order to assist them in tracking their progress.
+
+__Practicals__: The computer-lab practicals use structured tutorials designed to train students on the use of the open-source software program R for applying the methods learned in the lectures to data. The lectures will cover the material required for students to complete the practical assignments, however, they are designed to be complementary and not all the material in the practicals will be covered in the lectures and vice versa. These also provide training on communicating the results of statistical analyses, with a focus on reproducibility. Assessment of student learning will be based on submitted assignments (see detailed schedule below).
+
+__Data analysis project__: The core data analysis project is a major component of the course and is designed to train students in data analysis and presentation using best practices in open science. The core project is divided into 2 components aimed at replicating the typical analytical process: 1) the submission of a written paper describing the work; and 2) the archiving of code to ensure open and reproducible research (see details below).
+
+
+## Pre-course Checklist
+
+* The material learned in most entry level statistics course provides important background and context on the topics that will be covered in this course. It is recommended that you re-familiarise yourself with this material before the course (e.g., understand expectation values, variances, covariance matrices, linear regression, error distributions, etc.).
+* To fully engage in all of the course material will require a basic familiarity with R. Working through the book `R for Beginners' by Paradis (available at https://cran.r-project.org (Links to an external site.) --> ~Documentation/Contributed) before beginning the course is a good idea if you want to improve with R or with coding. Alternatively, the swirl R package (available at: https://swirlstats.com/students.html (Links to an external site.)) teaches R programming and data science interactively, at your own pace, and right in the R console.
+* If you intend to use your personal computer during the course, it is a good idea to try and install R, and RStudio before the course.
+
+## Optional Material
+
+There is no textbook for this course, but if students are interested in expanding their knowledge beyond what is covered in the course, the following textbook is recommended:
+
+* Baddeley, Rubok, and Turner (2015). Spatial Point Patterns: Methodology and Applications with R. Chapman and Hall. (Available through the UBC Library)
+
+## Course Evaluation
+
+The assignments and evaluation for this course are structured along two distinct, but complimentary lines: i) guided practical assignments; and ii) a core research project. The practical assignments are designed to provide students with the opportunity to learn how to apply the methods learned in the lectures to real data using the statistical software R. The core research project is designed to train students in data analysis and presentation using best practices in open science. The core project is divided into 2 components aimed at replicating the typical analytical process: 1) the submission of a written paper describing the work; and 2) the archiving of code to ensure open and reproducible research.
+
+|                                    |      |                                           |
+|------------------------------------|------|-------------------------------------------|
+| Research project                              | 50%  | Week 5                                   |
+| Practicals (4)                    | 40%  | Due on a weekly basis  |
+| Participation from practicals      | 10%  |  On a weekly basis |
+| Total                              | 100% |                                           |
+
+### Practical Assignments and Participation (50%)
+Beginning the first week of class, students will be guided through practicals during the lab sessions. They will then be asked to complete practical assignments on a weekly basis. There will be a total of 4 practicals to be completed throughout the course. Each is designed to provide students with the opportunity to learn how to apply the methods learned in the lectures and labs to novel datasets using tools implemented in the statistical software R. The purpose of these practical assignments is to ensure that students have the skills necessary to complete effective statistical analyses that are central to scientific research. The skills gained by completing each week’s assignment will also help students complete their research projects. The course web page on github will host the practicals, and the various datasets associated with each practical.
+<!-- Lectures will be given on Tuesdays and Thursdays. After the Thursdays lecture, we will have covered all of the material that is needed to complete the week’s practical assignment material which is due before the start of the following Thursday lecture (to be submitted online via canvas). -->
+
+__Grading__: Students are to submit answers to all questions in the practical. Each practical assignment is worth a total of 12.5% of your total grade. Of this, 2.5% is given for submitting the practical on time, irrespective of whether or not the answers are correct. This is intended as the participation component of the course. The remaining 10% comes from the answers provided. Solutions to each the practicals will be posted after the weekly submission deadline. Late practicals will be accepted after the solutions have been posted, but no participation grade will be given.
+
+### Research Projects (50%)
+Students will be required to complete one core data analysis project for this course. This assignment is designed to provide students with an opportunity to apply what they have learned in the lectures and practicals in an unguided format as they would if they were analysing data outside of a classroom setting. For this project, students will apply the modelling tools covered in the lectures on an empirical dataset (details below) and write a short report about their work on these data summarising their findings. This paper should be comprised of six sections: Introduction, Methods, Results, Discussion, References, and an Appendix Section.
+
+_Introduction_: Provide a brief description of the study system from which the data come and an outline of what questions you intend on exploring with the data, citing all relevant literature. Length: ca. 1-2 pages.
+
+_Methods_: Briefly describe how the data were collected and what variables are included. Provide a detailed description of the analytical workflow that was applied to the data, citing all relevant literature and statistical packages employed. There should be enough information that anyone can reproduce the workflow if they had access to the data. Length: As long as necessary.
+
+_Results_: Length: Describe your statistical findings. Tables and figures should be used throughout. Length: As long as necessary.
+
+_Discussion_: Provide a brief summary of your findings and place them in a biological context. Length: ca. 1-2 pages
+
+_References_: Include references to all necessary literature.
+
+_Appendix_: The appendix material should include an html document created via R markdown that details every step of the analyses. The code should be commented and clearly show how you arrived at the numbers presented in your results from the data on hand.
+
+ 
+__Datasets__: To complete these assignments, students will have access to a number of pre-selected datasets. Students can opt to use their own data to complete these assignments if they prefer, and are encouraged to do so, but must seek instructor approval. If you intend on using your own data, it is recommended that you discuss this with the instructor as early as possible. The pre-selected datasets are available on the course website.
+
+__Grading__: Students are to submit their final paper by the end of the day on Sunday of the 5th week of the course Papers will be graded out of 100, and will be worth a total of 35% of your total grade. Each section has the following value: Introduction 10%, Methods 25%, Results 20%, Discussion 10%, References 5%, and an Appendix Section 30%. Late papers will have 5% deducted per day that they are overdue, and will receive a grade of zero if more than 20 days late without a valid excuse.
+
+
+
+## Lecture Outline
+(Approximate schedule of topics covered in lectures)
+
+| Week        | Lecture Topics                                                                        | Practical Assignment                                                                                     |
+|-------------------|---------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| 1      | Course introduction; Working with Spatial Data                                             | Practical 01: Working with spatial data (12.5%)                                           |
+| 2     | Spatial patterns; Point process models                                    | Practical 02: Spatial patterns (12.5%) |
+| 3     | Point process models cont.; Spatial Autocorrelation; Variograms            | Practical 03: Point process models (12.5%)                                                 |
+| 4  | Kriging; Co-Kriging; Regression Kriging                          | Practical 04: Kriging (12.5%)                              |
+| 5 | No Lectures                          | Research project due (50%)                              |
