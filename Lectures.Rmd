@@ -18,7 +18,7 @@ Lecture slides and recordings for DATA 589: Spatial Statistics, 2023.
 
 #### Lecture 01 - Course Intro
 
-<!-- <a href="Lectures/01_Course_Intro.pdf" target="_blank">Slides.</a> -->
+<a href="Lectures/01_Intro.pdf" target="_blank">Slides.</a>
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
