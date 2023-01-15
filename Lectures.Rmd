@@ -33,9 +33,9 @@ Lecture slides and recordings for DATA 589: Spatial Statistics, 2023.
 ***
 <br />
 
-#### Lecture 03 - Point Processes 1
+#### Lecture 03 - Point Processes 1: Spatial Intensity
 
-<!-- <a href="Lectures/02_Scope_of_Evol_Ecol.pdf" target="_blank">Slides.</a> -->
+<a href="Lectures/03_Point_Process_Intro.pdf" target="_blank">Slides.</a>
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
