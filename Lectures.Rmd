@@ -7,12 +7,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Lecture slides and recordings for DATA 589: Spatial Statistics, 2023.
+Lecture slides and recordings for DATA 589: Spatial Statistics.
 
 <br />
 
 ***
-# Working with Spatial Data
+# Introduction to Spatial Data
 ***
 <br />
 
@@ -22,32 +22,34 @@ Lecture slides and recordings for DATA 589: Spatial Statistics, 2023.
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
-#### Lecture 02 - Working with Spatial Data
 
-<!-- <a href="Lectures/02_Scope_of_Evol_Ecol.pdf" target="_blank">Slides.</a> -->
-
-<!-- <a href="" target="_blank">Recording.</a> -->
 
 ***
 # Point Processes
 ***
 <br />
 
-#### Lecture 03 - Point Processes 1: Spatial Intensity
+#### Lecture 02 - Spatial Intensity
 
-<a href="Lectures/03_Point_Process_Intro.pdf" target="_blank">Slides.</a>
-
-<!-- <a href="" target="_blank">Recording.</a> -->
-
-#### Lecture 04 - Point Processes 2
-
-<!-- <a href="Lectures/03_Selection_Adaptation.pdf" target="_blank">Slides.</a> -->
+<a href="Lectures/02_Point_Process_Intro.pdf" target="_blank">Slides.</a>
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
-#### Lecture 05 - Point Processes 3
+#### Lecture 03 - Spatial Correlations
 
-<!-- <a href="Lectures/03_Selection_Adaptation.pdf" target="_blank">Slides.</a> -->
+<a href="Lectures/03_Point_Processes_2_Correlations.pdf" target="_blank">Slides.</a>
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 04 - Poisson Point Processes
+
+<a href="Lectures/04_PP_3_Poisson_Models.pdf" target="_blank">Slides.</a>
+
+<!-- <a href="" target="_blank">Recording.</a> -->
+
+#### Lecture 05 - Poisson Point Processes Model Validation
+
+<a href="Lectures/05_PP_4_Model_Validation.pdf" target="_blank">Slides.</a>
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
@@ -58,19 +60,19 @@ Lecture slides and recordings for DATA 589: Spatial Statistics, 2023.
 ***
 <br />
 
-#### Lecture 06 - Spatial Autocorrelation 1: Variograms
+#### Lecture 06 - Variograms
 
 <a href="Lectures/06_Spatial_Autocorrelation.pdf" target="_blank">Slides.</a>
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
-#### Lecture 07 - Spatial Autocorrelation 2: Kriging
+#### Lecture 07 - Kriging
 
 <a href="Lectures/07_Kriging.pdf" target="_blank">Slides.</a>
 
 <!-- <a href="" target="_blank">Recording.</a> -->
 
-#### Lecture 08 - Spatial Autocorrelation 3: Kriging with covariates
+#### Lecture 08 - Kriging with covariates
 
 <a href="Lectures/08_coKriging.pdf" target="_blank">Slides.</a>
 

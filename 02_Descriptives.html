@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 02 - Exploratory Data Analysis</title>
+
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="tutorial.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DATA 589 Spatial Statistics &mdash; UBC-Okanagan</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Lectures.html">Lectures</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Labs
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_spatstat.html">Lab 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives.html">Lab 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_models.html">Lab 03</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Exercises.html">Assignment 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives_Assignment.html">Assignment 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_Models_Assignment.html">Assignment 03</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Datasets.html">Datasets</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 02 - Exploratory Data Analysis</h1>
+
+</div>
+
+
+<hr />
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p>We have seen how a spatial point pattern is a dataset comprised of
+the locations of ‘things’ or ‘events’. Irrespective of our analytical
+aims, the first thing we usually want to do is visualise our data and
+calculate some summary statistics.</p>
+<p>In this lab we will:</p>
+<ul>
+<li>Learn how to estimate first and second moment descriptive statistics
+of a point pattern.</li>
+<li>Explore ways to visualise descriptive statistics.</li>
+<li>Learn how to explore the potential for relationships between points
+and covariates.</li>
+<li>Use simualtion-based methods to estimate confidence intervals.</li>
+<li>See how descriptive statistics can guide more formal statistical
+modelling.</li>
+</ul>
+<hr />
+</div>
+<div id="first-moment-descriptive-statistics" class="section level2">
+<h2>First moment descriptive statistics</h2>
+<p>With some point data in hand, the first summary statistics we want to
+calculate is the average number of points per unit area (i.e., our
+‘expectation’, or ‘first moment’). In point pattern analysis, this
+quantity is called the ‘intensity’, denoted <span
+class="math inline">\(\lambda\)</span>. While estimating the intensity
+generally requires few assumptions, there are a number of different
+approaches we can use to estimate <span
+class="math inline">\(\lambda\)</span>, depending on the structure of
+our data and the assumptions we are willing to make.</p>
+<p>To demonstrate how to estimate first moment descriptive statistics,
+we will use the <code>bei</code> dataset. This is a point pattern giving
+the locations of 3605 trees in a tropical rain forest in Panama.
+Accompanied by covariate data giving the elevation and slope in the
+study region. The supporting information is stored in an object called
+<code>bei.extra</code>.</p>
+<pre class="r"><code>#load the spatstat package
+library(spatstat)
+
+#Load in the bei dataset
+data(&quot;bei&quot;)
+
+#Visualise the point pattern
+plot(bei,
+     pch = 16,
+     cex = 0.5,
+     cols = &quot;#046C9A&quot;,
+     main = &quot;Beilschmiedia pendula locations&quot;)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-2-1.png" width="768" /></p>
+<div id="spatially-homogeneous-lambda" class="section level3">
+<h3>Spatially homogeneous <span
+class="math inline">\(\lambda\)</span></h3>
+<p>The value of <span class="math inline">\(\lambda\)</span> is a useful
+metric as it allows us to make predictions about how many points we
+might expect to find at any location. Under an assumption of
+homogeneity, the expected number of points falling within <span
+class="math inline">\(B\)</span> is simply proportional to the area of
+<span class="math inline">\(B\)</span>:</p>
+</br>
+<center>
+<span class="math inline">\(\mathbb{E}[n\mathbf{X} \cap B] = \lambda
+|B|\)</span>
+</center>
+<p></br></p>
+<p>where <span class="math inline">\(\mathbb{E}[n\mathbf{X} \cap
+B]\)</span> is the expected number of points in <span
+class="math inline">\(B\)</span>, <span
+class="math inline">\(\lambda\)</span> is the intensity (in units of
+points per unit area), and <span class="math inline">\(|B|\)</span> is
+the area of B (in units of area).</p>
+<p>The simplest estimator of <span
+class="math inline">\(\lambda\)</span> is just the number of points in
+our window <span class="math inline">\(B\)</span>, divided by the area
+of <span class="math inline">\(B\)</span>. There are several way to
+obtain this quantity from a <code>ppp</code> object in
+<code>spatstat</code>.</p>
+<pre class="r"><code>#Estimate intensity by hand
+npoints(bei)/area(Window(bei))</code></pre>
+<pre><code>## [1] 0.007208</code></pre>
+<pre class="r"><code>#Get units
+unitname(bei)</code></pre>
+<pre><code>## metre / metres</code></pre>
+<pre class="r"><code>#Estimate intensity automatically
+intensity(bei)</code></pre>
+<pre><code>## [1] 0.007208</code></pre>
+<pre class="r"><code>#Intensity is also returned via the summary function
+summary(bei)</code></pre>
+<pre><code>## Planar point pattern:  3604 points
+## Average intensity 0.007208 points per square metre
+## 
+## Coordinates are given to 1 decimal place
+## i.e. rounded to the nearest multiple of 0.1 metres
+## 
+## Window: rectangle = [0, 1000] x [0, 500] metres
+## Window area = 5e+05 square metres
+## Unit of length: 1 metre</code></pre>
+<p>Whether estimated by hand, or via the <code>intensity</code>
+function, we see that this simple estimator estimates an intensity of
+0.007208 trees per m. This number is hard to interpret, so we could
+convert this to trees/km via <code>spatstat::rescale()</code>.</p>
+<pre class="r"><code>#Rescale the window to units of km
+win_km &lt;- rescale(Window(bei), 1000, &quot;km&quot;)
+
+# Intensity in trees/km^2
+npoints(bei)/area(win_km)</code></pre>
+<pre><code>## [1] 7208</code></pre>
+<p>This particular dataset does not have any marks, but we could weight
+the data based on any supporting information via the
+<code>weights</code> argument in the <code>intensity</code>
+function.</p>
+</div>
+<div id="spatially-inhomogeneous-lambda" class="section level3">
+<h3>Spatially inhomogeneous <span
+class="math inline">\(\lambda\)</span></h3>
+<p>Estimating the intensity as shown above assumes spatial homogeneity
+(i.e., <span class="math inline">\(\lambda\)</span> is constant in
+space). In most real scenarios, <span
+class="math inline">\(\lambda\)</span> is likely to be spatially varying
+(in fact, a spatial homogeneous point pattern probably wouldn’t require
+any involved analysis to study). This means that our simple, spatially
+inhomogeneous estimator would be biased and misrepresentative. When
+<span class="math inline">\(\lambda\)</span> is spatially varying, the
+intensity at any location <span class="math inline">\(u\)</span> is
+<span class="math inline">\(\lambda(u)\)</span>. The number of points
+falling in <span class="math inline">\(B\)</span> is thus given by the
+integral of the intensity function within <span
+class="math inline">\(B\)</span></p>
+</br>
+<center>
+<span class="math inline">\(\mathbb{E}[n(\mathbf{X} \cap B)] = \int_B
+\lambda(u) du\)</span>
+</center>
+<p></br></p>
+<p>In turn, this implies that we now need an estimator of <span
+class="math inline">\(\lambda(u)\)</span>.</p>
+<p></br></p>
+<div id="quadrat-counting" class="section level4">
+<h4>Quadrat counting</h4>
+<p></br></p>
+<p>When <span class="math inline">\(\lambda\)</span> is spatially
+varying, <span class="math inline">\(\lambda(u)\)</span> can be
+estimated nonparametrically by dividing the window into sub-regions
+(i.e., quadrats) and using our simple points/area estimator. The number
+of points <span class="math inline">\(n\)</span> falling in each quadrat
+<span class="math inline">\(j\)</span>, is <span
+class="math inline">\(n_j = n(\mathbf{x} \cap B_j)\)</span> for <span
+class="math inline">\(j = 1 \dots,m\)</span>, which is an unbiased
+estimate of <span class="math inline">\(\mathbb{E}[n(\mathbf{X} \cap
+B_j)]\)</span>. We can therefore estimate the intensity in each quadrat
+by counting the number of points in each quadrat divided by the
+quadrat’s area</p>
+</br>
+<center>
+<span class="math inline">\(\hat{\lambda(j)} = \frac{n(\mathbf{x} \cap
+B_j)}{|B_j|}\)</span> for <span class="math inline">\(j = 1
+\dots,m\)</span>
+</center>
+<p></br></p>
+<p>In <code>spatstat</code>, this approach is available via the
+<code>quadratcount</code> function.</p>
+<pre class="r"><code>#Split into a 10 by 10 quadrat and count points
+Q &lt;- quadratcount(bei,
+                  nx = 10,
+                  ny = 10)
+
+#Plot the output 
+plot(bei,
+     pch = 16,
+     cex = 0.5,
+     cols = &quot;#046C9A&quot;,
+     main = &quot;Beilschmiedia pendula locations&quot;)
+
+plot(Q, cex = 2, col = &quot;red&quot;, add = T)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<pre class="r"><code>#Estimate intensity in each quadrat
+intensity(Q)</code></pre>
+<pre><code>##            x
+## y           [0,100) [100,200) [200,300) [300,400) [400,500) [500,600) [600,700)
+##   [450,500]  0.0138    0.0156    0.0314    0.0252    0.0040    0.0032    0.0002
+##   [400,450)  0.0134    0.0114    0.0180    0.0056    0.0082    0.0046    0.0016
+##   [350,400)  0.0088    0.0064    0.0180    0.0128    0.0098    0.0034    0.0006
+##   [300,350)  0.0096    0.0112    0.0018    0.0108    0.0040    0.0036    0.0012
+##   [250,300)  0.0148    0.0124    0.0008    0.0000    0.0008    0.0036    0.0018
+##   [200,250)  0.0272    0.0124    0.0000    0.0000    0.0002    0.0006    0.0010
+##   [150,200)  0.0116    0.0032    0.0018    0.0004    0.0002    0.0002    0.0008
+##   [100,150)  0.0080    0.0116    0.0024    0.0040    0.0012    0.0036    0.0068
+##   [50,100)   0.0090    0.0064    0.0014    0.0050    0.0030    0.0118    0.0212
+##   [0,50)     0.0096    0.0042    0.0072    0.0042    0.0076    0.0244    0.0242
+##            x
+## y           [700,800) [800,900) [900,1e+03]
+##   [450,500]    0.0022    0.0136      0.0024
+##   [400,450)    0.0024    0.0132      0.0138
+##   [350,400)    0.0028    0.0062      0.0090
+##   [300,350)    0.0022    0.0106      0.0040
+##   [250,300)    0.0024    0.0120      0.0016
+##   [200,250)    0.0014    0.0190      0.0018
+##   [150,200)    0.0028    0.0048      0.0024
+##   [100,150)    0.0184    0.0084      0.0010
+##   [50,100)     0.0150    0.0072      0.0000
+##   [0,50)       0.0072    0.0042      0.0000</code></pre>
+<pre class="r"><code>#Plot the output Note the use of image = TRUE
+plot(intensity(Q, image = T),
+     main = &quot;Beilschmiedia pendula intensity&quot;)
+
+plot(bei,
+     pch = 16,
+     cex = 0.6,
+     cols = &quot;white&quot;,
+     add = T)
+
+plot(bei,
+     pch = 16,
+     cex = 0.5,
+     cols = &quot;black&quot;,
+     add = T)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<p>Clearly, the assumption of homogeneity is not appropriate for this
+dataset as the trees tend to be clustered in certain areas of the study
+site, whereas others have no trees at all. Quadrat counting suggests a
+spatially varying, inhomogeneous <span
+class="math inline">\(\lambda(u)\)</span>, but point processes are
+stochastic and some variation is expected by chance alone. Our eyes are
+also a poor judge of homogeneity, so we should ideally test for spatial
+(in)homogeneity objectively. Under a null hypothesis that the intensity
+is homogeneous, and if all quadrats have equal area, then the expected
+number of points falling in each quadrat, <span
+class="math inline">\(j\)</span>, is just <span
+class="math inline">\(\lambda a_j\)</span>, where <span
+class="math inline">\(a_j\)</span> is the area of each quadrat. We can
+therefore test for significant deviations from complete spatial
+randomness (CSR) using a <span class="math inline">\(\chi^2\)</span>
+test</p>
+</br>
+<center>
+<span class="math inline">\(\chi^2 = \Sigma_j \frac{(\mathrm{observed -
+expected})^2}{\mathrm{expected}} = \Sigma_j \frac{(n_j - \hat{\lambda}
+a_j)^2}{\hat{\lambda} a_j}\)</span>,
+</center>
+<p></br></p>
+<p>where <span class="math inline">\(\hat{\lambda}\)</span> is estimated
+using the points/area estimator. This test can be performed using the
+<code>quadrat.test()</code> function from the <code>spatstat</code>
+package.</p>
+<pre class="r"><code>#Quadrat test of homogeneity 
+quadrat.test(Q)</code></pre>
+<pre><code>## 
+##  Chi-squared test of CSR using quadrat counts
+## 
+## data:  
+## X2 = 3289, df = 99, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## 
+## Quadrats: 10 by 10 grid of tiles</code></pre>
+<p>The small p-value suggests that there is a significant deviation from
+homogeneity. The p-value doesn’t provide any information on the cause of
+inhomogeneity, however, and significant deviations can be due to the
+processes truly being inhomogenous, but also due to a lack of
+independence between points. We will touch on this latter point
+below.</p>
+<p></br></p>
+</div>
+<div id="kernel-estimation" class="section level4">
+<h4>Kernel estimation</h4>
+<p></br></p>
+<p>A spatially varying, <span class="math inline">\(\lambda(u)\)</span>
+can also be estimated non-parametrically by kernel estimation. Kernels
+estimate <span class="math inline">\(\lambda(u)\)</span> by placing
+<code>kernels' on each datapoint (often bi-variate Gaussian) and optimising the</code>bandwidth’
+(i.e., the standard deviation of the kernel). In practice, there are
+many different bandwidth optimisers, kernel shapes, and bias corrections
+for estimating <span class="math inline">\(\hat{\lambda}(u)\)</span>.
+Kernel estimation is a statistically efficient non-parametric estimation
+technique, but can be sensitive to data features and the chosen
+bandwidth. Because the estimated intensity will be sensitive to the
+choice of the bandwidth, care should be taken when selecting the
+bandwidth (see chapter 5 of Baddeley, Rubak, &amp; Turner (2015) for
+further details).</p>
+<pre class="r"><code>#Density estimation of lambda(u)
+lambda_u_hat &lt;- density(bei)
+
+#Plot the output Note the use of image = TRUE
+plot(lambda_u_hat,
+     main = &quot;Kernel estimate of Beilschmiedia pendula intensity&quot;)
+
+plot(bei,
+     pch = 16,
+     cex = 0.6,
+     cols = &quot;white&quot;,
+     add = T)
+
+plot(bei,
+     pch = 16,
+     cex = 0.5,
+     cols = &quot;black&quot;,
+     add = T)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<pre class="r"><code># Note the sensitivity of the estimated intensity to the bandwidth optimiser
+par(mfrow = c(1,2), mar = rep(0.1,4))
+plot(density(bei, sigma = bw.diggle), # Cross Validation Bandwidth Selection
+     ribbon = F,
+     main = &quot;&quot;) 
+plot(density(bei, sigma = bw.ppl),  # Likelihood Cross Validation Bandwidth Selection
+     ribbon = F,
+     main = &quot;&quot;)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-8-2.png" width="768" /></p>
+<p>Weighted kernel estimation can be carried out via the
+<code>weights</code> argument of the <code>density()</code> function. In
+addition, the default uses a single bandwidth across the whole dataset,
+but this can be relaxed by using adaptive smoothing via the
+<code>adaptive.density()</code> function.</p>
+<pre class="r"><code>#Density estimation of lambda(u)
+lambda_u_hat_adaptive &lt;- adaptive.density(bei, method = &quot;kernel&quot;)
+
+#Plot the output Note the use of image = TRUE
+plot(lambda_u_hat_adaptive,
+     main = &quot;Adaptive kernel estimate of intensity&quot;)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+</div>
+<div id="hot-spot-analysis" class="section level4">
+<h4>Hot spot analysis</h4>
+<p>If the intensity is inhomogeneous, we often want to identify areas of
+elevated intensity (i.e., hotspots). Identifying hotspots can provide
+valuable information on a spatial processes (e.g., high crime areas, a
+high density of artifacts at an archeological dig, dense clusters of
+galaxies in the universe). The best place to start is usually with the
+kernel estimate (zones of elevated intensity are usually clearly
+visible). Depending on your research goals a visual assessment may be
+sufficient. If you need something more objective, one option is a scan
+test. Scan tests function as such: at each location <span
+class="math inline">\(u\)</span>, we draw a circle of radius <span
+class="math inline">\(r\)</span>. We can then count the number of points
+in <span class="math inline">\(n_{\mathrm{in}} = n(\mathbf{x} \cap
+b(u,r))\)</span> and out <span class="math inline">\(n_{\mathrm{out}} =
+n(\mathbf{x} \cap W \notin b(u,r))\)</span> of the circle. Under an
+assumption that the process is Poisson distributed, we can calculate a
+likelihood ratio test statistics for the number of points inside
+vs. outside of the circle (details in spatstat textbook). The null
+distribution is <span class="math inline">\(\sim \chi^2\)</span> with 1
+degree of freedom, allowing us to calculate p-values at each location
+<span class="math inline">\(u\)</span>. This test can be undertaken via
+the <code>scanLRTS()</code> function.</p>
+<p>The choice of the radius <span class="math inline">\(r\)</span> can
+be guided by knowledge of the system or research question. In other
+instances, it can be estimated, for instance, through kernel bandwidth
+optimisation. The latter approach is detailed below. In any case, a
+sensitivity analysis on the radius should be undertaken.</p>
+<pre class="r"><code># Estimate R
+R &lt;- bw.ppl(bei)
+
+#Calculate test statistic
+LR &lt;- scanLRTS(bei, r = R)
+
+#Plot the output 
+plot(LR)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<pre class="r"><code>#Compute local p-values
+pvals &lt;- eval.im(pchisq(LR,
+                        df = 1,
+                        lower.tail = FALSE))
+
+
+#Plot the output
+plot(pvals, main = &quot;Local p-values&quot;)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-10-2.png" width="768" /></p>
+</div>
+<div id="relationships-with-covariates" class="section level4">
+<h4>Relationships with covariates</h4>
+<p>We are usually interested in determining whether the intensity
+depends on a covariate(s). A visual assessment may be informative, but
+is unlikely to be sufficient. One simple approach to check for a
+relationship between <span class="math inline">\(\lambda(u)\)</span> and
+a spatial covariate <span class="math inline">\(Z(u)\)</span> is via
+quadrat counting.</p>
+<pre class="r"><code>#Extract elevation information
+elev &lt;- bei.extra$elev
+
+#define quartiles
+b &lt;- quantile(elev, probs = (0:4)/4, type = 2)
+
+#Split image into 4 equal-area quadrats based on elevation values
+Zcut &lt;- cut(elev, breaks = b)
+V &lt;- tess(image = Zcut)
+
+#Count points in each quadrate
+quadratcount(bei, tess = V)</code></pre>
+<pre><code>## tile
+## (120,140] (140,144] (144,150] (150,159] 
+##       714       883      1344       663</code></pre>
+<p>More formally, in testing for relationships with covariates we are
+assuming that <span class="math inline">\(\lambda\)</span> is a function
+of <span class="math inline">\(Z\)</span>, such that</p>
+</br>
+<center>
+<span class="math inline">\(\lambda(u) = \rho(Z(u))\)</span>.
+</center>
+<p></br></p>
+<p>A non-parametric estimate of <span
+class="math inline">\(\rho\)</span> can be obtained via kernel
+estimation, available via the <code>rhohat()</code> function.</p>
+<pre class="r"><code>#Estimate Rho
+rho &lt;- rhohat(bei, elev)
+
+plot(rho)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="second-moment-descriptives" class="section level2">
+<h2>Second Moment Descriptives</h2>
+<p>The spatial intensity of a process provides us with information on
+the number of points we can expect to find at any location <span
+class="math inline">\(u\)</span>, but says nothing about the
+relationships between points. Points can have a tendency to avoid one
+another, be independent, or cluster. This can generate patterns in the
+intensity, but we need to know if this is caused by external factors
+underpining the distribution of <span
+class="math inline">\(\lambda(u)\)</span>, or relationships (i.e.,
+correlation) between points. In order to fully understand a point
+process we therefore need to be able to describe the correlation between
+points. In statistics, first moment quantities describe the mean value
+of a random variable <span class="math inline">\(X\)</span>, second
+moment quantities describe the mean of <span
+class="math inline">\(X^2\)</span> (variance, standard deviation
+correlation, etc.). For a point process <span
+class="math inline">\(X\)</span>, the second moment of <span
+class="math inline">\(n(\mathbf{X} \cap B)\)</span> can be interpreted
+as describing patterns in the <em>pairs</em> of points <span
+class="math inline">\(x_i,x_j\)</span> falling in set <span
+class="math inline">\(B\)</span>.</p>
+<div id="morisitas-index" class="section level3">
+<h3>Morisita’s index</h3>
+<p>If we’re interested in describing correlations, one of the first
+places to start is with a simple descriptive statistic. Quadrat counting
+is useful here. If we subdivide the window into equally sized, <span
+class="math inline">\(m\)</span>, quadrats, we can count how often a
+pair of points falls in the same quadrat. Formally, for a process with
+<span class="math inline">\(n\)</span> points, there are <span
+class="math inline">\(n(n-1)\)</span> ordered pairs of distinct points.
+When there are <span class="math inline">\(m\)</span> quadrats, the
+<span class="math inline">\(j\)</span>th quadrat contains <span
+class="math inline">\(n_j (n_j - 1)\)</span> ordered pairs of distinct
+points, and the total number of ordered pairs of distinct points which
+fall inside the same quadrat is <span class="math inline">\(\Sigma_j n_j
+(n_j - 1)\)</span>. The ratio</p>
+</br>
+<center>
+<span class="math inline">\(\frac{\Sigma_j n_j (n_j -
+1)}{n(n-1)}\)</span>.
+</center>
+<p></br></p>
+<p>describes the fraction of all pairs of points which both fall in the
+same quadrat. Under an assumption of homogeneity, the probability of a
+pair of points falling inside equally sized quadrats is just <span
+class="math inline">\(\frac{1}{m}\)</span>, giving us Morisita’s
+Index:</p>
+</br>
+<center>
+<span class="math inline">\(M = m \frac{\Sigma_j n_j (n_j -
+1)}{n(n-1)}\)</span>.
+</center>
+<p></br></p>
+<p>This index should be close to 1 if points are independent of one
+another, lower than 1 if there is avoidance, and greater than 1 if there
+is attraction.</p>
+<pre class="r"><code>#Morisita&#39;s Index plot
+miplot(bei,
+       ylim = c(0,7),
+       main = &quot;&quot;,
+       pch = 16,
+       col = &quot;#046C9A&quot;)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<p>This figure shows evidence of substantial clustering in the locations
+where <em>Beilschmiedia pendula</em> grows in Panama, however, the
+derivations assume homogeneity. This is an assumption that is rarely
+satisfied in real point datasets because most ‘points’ we’re interested
+in are not randomly distributed (if they were randomly distributed, we
+likely wouldn’t be studying them). Large values of <span
+class="math inline">\(M\)</span> can occur without any underlying
+attraction between point when intensity is inhomogenous. If the
+assumption of homogeneity is broken, the index is not well defined and
+unlikely to be trustworthy. The index is also based on discrete and
+somewhat arbitrary subdivisions, and so is not sensitive to subtle,
+fine-scale changes.</p>
+</div>
+<div id="ripleys-k-function" class="section level3">
+<h3>Ripley’s <span class="math inline">\(K\)</span>-function</h3>
+<p>Morisita’s index describes correlations based on the rate at which
+pairs of points are found `close’ together, but if we’re interested in
+the spacing (or distance) between points, it is more efficient to build
+our metric directly off of the separation distances <span
+class="math inline">\(d_{ij} = ||x_i - x_j||\)</span> between all
+ordered pairs of distinct points. In this context, different patterns in
+clustering should result in different patterns in separation
+distances.</p>
+<p>If we consider the cumulative distribution of pairwise separation
+distances</p>
+</br>
+<center>
+<span class="math display">\[\begin{align*}
+\hat{H}(r) &amp; = \mathrm{fraction~of~values~of~} d_{ij} &lt; r \\
+&amp; = \frac{1}{n(n-1)} \sum_{i=1}^{n}\sum_{j=1}^{n} 1\{d_{ij} \leq r
+\}
+\end{align*}\]</span>
+</center>
+<p></br></p>
+<p>where <span class="math inline">\(1\{d_{ij} \leq r \} = 1\)</span> if
+true, and 0 if false and the sum is taken over all ordered pairs where
+the indices aren’t equal (i.e., <span
+class="math inline">\(\hat{H}(r)\)</span> is the fraction of pairs of
+points separated by a distance <span class="math inline">\(\leq
+r\)</span>).</p>
+<p><span class="math inline">\(\hat{H}(r)\)</span> is valuable, but it
+is an absolute, so it can’t be compared between processes with different
+numbers of points. Because the average number of points expected in any
+radius <span class="math inline">\(r\)</span> is a function of the
+intensity <span class="math inline">\(\lambda\)</span>, we can derive a
+correction for <span class="math inline">\(\hat{H}(r)\)</span> that
+allows for comparisons between processes (derivations in section 7.3 of
+Baddeley et al. 2005):</p>
+</br>
+<center>
+<span class="math display">\[\begin{align*}
+\hat{K}(r) = \frac{|W|}{n(n-1)} \sum_{i=1}^{n}\sum_{j=1}^{n} 1\{d_{ij}
+\leq r \} e_{ij}(r)
+\end{align*}\]</span>
+</center>
+<p></br></p>
+<p>where <span class="math inline">\(|W|\)</span> is the observation
+window, <span class="math inline">\(e_{ij}(r)\)</span> is an additional
+edge correction, and <span class="math inline">\(\hat{K}(r)\)</span> is
+the well known empirical <span
+class="math inline">\(K\)</span>-function. The <span
+class="math inline">\(K\)</span>-function thus describes the cumulative
+average number of points falling within distance <span
+class="math inline">\(r\)</span> of a typical point.</p>
+<p>For a homogeneous Poisson point process it can be shown that the
+expected <span class="math inline">\(K\)</span>-function is given simply
+by:</p>
+</br>
+<center>
+<span class="math display">\[\begin{align*}
+{K}(r) = \pi r ^2
+\end{align*}\]</span>
+</center>
+<p></br></p>
+<p>In other words, it is simply a function of the area of a circle with
+radius <span class="math inline">\(r\)</span>. Any deviations between
+the empirical and theoretical <span
+class="math inline">\(K\)</span>-functions are thus an indication of
+correlations between points.</p>
+<pre class="r"><code>#Estimate the empirical k-function
+k_bei &lt;- Kest(bei)
+
+#Display the object
+k_bei</code></pre>
+<pre><code>## Function value object (class &#39;fv&#39;)
+## for the function r -&gt; K(r)
+## ........................................................
+##        Math.label      Description                      
+## r      r               distance argument r              
+## theo   K[pois](r)      theoretical Poisson K(r)         
+## border hat(K)[bord](r) border-corrected estimate of K(r)
+## ........................................................
+## Default plot formula:  .~r
+## where &quot;.&quot; stands for &#39;border&#39;, &#39;theo&#39;
+## Recommended range of argument r: [0, 125]
+## Available range of argument r: [0, 125]
+## Unit of length: 1 metre</code></pre>
+<pre class="r"><code>#visualise the results
+plot(k_bei,
+     main = &quot;&quot;,
+     lwd = 2)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p>The empirical <span class="math inline">\(K\)</span>-function (in
+black) deviates from the theoretical <span
+class="math inline">\(K\)</span>-function (in red), but the results are
+difficult to interpret due to a lack of a measure of uncertainty. To
+understand what would constitute a meaningful deviation, we can generate
+bootstrapped estimates of <span
+class="math inline">\(\hat{K}(r)\)</span> to obtain confidence
+intervals.</p>
+<pre class="r"><code># Bootstrapped CIs
+# rank = 1 means the max and min
+# Border correction is to correct for edges around the window
+# values will be used for CI
+E_bei &lt;- envelope(bei,
+                  Kest,
+                  correction=&quot;border&quot;,
+                  rank = 1,
+                  nsim = 19,
+                  fix.n = T)</code></pre>
+<pre><code>## Generating 19 simulations of CSR with fixed number of points  ...
+## 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+## 19.
+## 
+## Done.</code></pre>
+<pre class="r"><code># visualise the results
+plot(E_bei,
+     main = &quot;&quot;,
+     lwd = 2)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+<p>Now we have evidence that suggests <em>significant</em> clustering.
+Because we set <code>nsim</code> to 19, this corresponds to an <span
+class="math inline">\(\alpha\)</span> of 0.05. If we wanted an <span
+class="math inline">\(\alpha\)</span> of 0.01, we would set
+<code>nsim</code> as 99 (i.e., a 1/100 chance that the observed <span
+class="math inline">\(K\)</span>-function deviates from the theoretical
+distribution).</p>
+<pre class="r"><code># Bootstrapped CIs
+E_bei_99 &lt;- envelope(bei,
+                     Kest,
+                     correction=&quot;border&quot;,
+                     rank = 1,
+                     nsim = 99,
+                     fix.n = T)</code></pre>
+<pre><code>## Generating 99 simulations of CSR with fixed number of points  ...
+## 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+## 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+## 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+## 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
+## 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 
+## 99.
+## 
+## Done.</code></pre>
+<pre class="r"><code># visualise the results
+plot(E_bei_99,
+     main = &quot;&quot;,
+     lwd = 2)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<p>Note the wider confidence intervals, and overlap at greater values of
+<span class="math inline">\(r\)</span>. The results suggest significant
+clustering, but the estimators assume homogeneity. We can relax this
+assumption via the <code>Kinhom()</code> function.</p>
+<pre class="r"><code>#Estimate intensity
+lambda_bei &lt;- density(bei, bw.ppl)
+
+Kinhom_bei &lt;- Kinhom(bei, lambda_bei)
+
+Kinhom_bei</code></pre>
+<pre><code>## Function value object (class &#39;fv&#39;)
+## for the function r -&gt; K[inhom](r)
+## ................................................................................
+##            Math.label                
+## r          r                         
+## theo       K[pois](r)                
+## border     {hat(K)[inhom]^{bord}}(r) 
+## bord.modif {hat(K)[inhom]^{bordm}}(r)
+##            Description                                      
+## r          distance argument r                              
+## theo       theoretical Poisson K[inhom](r)                  
+## border     border-corrected estimate of K[inhom](r)         
+## bord.modif modified border-corrected estimate of K[inhom](r)
+## ................................................................................
+## Default plot formula:  .~r
+## where &quot;.&quot; stands for &#39;bord.modif&#39;, &#39;border&#39;, &#39;theo&#39;
+## Recommended range of argument r: [0, 125]
+## Available range of argument r: [0, 125]
+## Unit of length: 1 metre</code></pre>
+<pre class="r"><code># visualise the results
+plot(Kinhom_bei,
+     theo ~ r,
+     main = &quot;&quot;,
+     col = &quot;grey70&quot;,
+     lty = &quot;dashed&quot;,
+     lwd = 2)
+
+plot(Kinhom_bei,
+     border ~ r,
+     col = c(&quot;#046C9A&quot;),
+     lwd = 2,
+     add = T)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
+<p>When corrected for inhomogeneity, the deviations appear much less
+meaningful. This would suggest the much of the correlations between
+points are due to relationships with covariates, rather than
+relationships between the points (or, here, the individual trees). Here
+again though confidence intervals would help.</p>
+<pre class="r"><code>#Estimate a strictly positive density
+lambda_bei_pos &lt;- density(bei,
+                          sigma=bw.ppl,
+                          positive=TRUE)
+
+#Simulation envelope (with points drawn from the estimated intensity)
+E_bei_inhom &lt;- envelope(bei,
+                        Kinhom,
+                        simulate = expression(rpoispp(lambda_bei_pos)),
+                        correction=&quot;border&quot;,
+                        rank = 1,
+                        nsim = 19,
+                        fix.n = TRUE)</code></pre>
+<pre><code>## Generating 19 simulations by evaluating expression  ...
+## 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+## 19.
+## 
+## Done.</code></pre>
+<pre class="r"><code># visualise the results
+par(mfrow = c(1,2))
+plot(E_bei_inhom,
+     main = &quot;&quot;,
+     lwd = 2)
+
+# Zoom in on range where significant deviations appear
+plot(E_bei_inhom,
+     xlim = c(0,35),
+     main = &quot;&quot;,
+     lwd = 2)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+<p>When corrected for inhomogeneity, significant clustering only appears
+to exist in and around 0-30 meters.</p>
+</div>
+<div id="pair-correlation-function" class="section level3">
+<h3>Pair Correlation Function</h3>
+<p>Ripley’s <span class="math inline">\(K\)</span>-function provides
+information on whether their are significant deviations from
+independence between points, but provides limited information on the
+behaviour of the process. This is due in part to the cumulative nature
+of the metric, meaning it contains the contribution of all inter-point
+distances <span class="math inline">\(\leq r\)</span>. An alternative
+tool is the pair correlation function <span
+class="math inline">\(g(r)\)</span>, which only contains contributions
+from inter-point distances <span class="math inline">\(= r\)</span></p>
+</br>
+<center>
+<span class="math display">\[\begin{align*}
+g(r) = \frac{{K}(r)\prime}{2 \pi r}
+\end{align*}\]</span>
+</center>
+<p></br></p>
+<p>i.e., the derivative of the <span
+class="math inline">\(K\)</span>-function with respect to <span
+class="math inline">\(r\)</span>. So while <span
+class="math inline">\(K(r)\)</span> counts all points within a circle of
+radius <span class="math inline">\(r\)</span>, <span
+class="math inline">\(g(r)\)</span> counts all points within a ring of
+radii <span class="math inline">\(r\)</span> &amp; <span
+class="math inline">\(r + h\)</span>. Interestingly, analogous metrics
+have arisen independently in other fields of research (e.g., the radial
+distribution function from physics/chemistry).</p>
+<p>Under CSR, <span class="math inline">\(g(r)\)</span> has an expected
+value of 1, values <span class="math inline">\(&lt;1\)</span> indicate
+fewer points with separation distance <span
+class="math inline">\(r\)</span> than expected (i.e., avoidance), and
+vice versa for <span class="math inline">\(g(r) &gt; 1\)</span>.</p>
+<pre class="r"><code># Estimate the g function
+pcf_bei &lt;- pcf(bei)
+
+pcf_bei</code></pre>
+<pre><code>## Function value object (class &#39;fv&#39;)
+## for the function r -&gt; g(r)
+## ..............................................................
+##       Math.label        Description                           
+## r     r                 distance argument r                   
+## theo  g[Pois](r)        theoretical Poisson g(r)              
+## trans hat(g)[Trans](r)  translation-corrected estimate of g(r)
+## iso   hat(g)[Ripley](r) isotropic-corrected estimate of g(r)  
+## ..............................................................
+## Default plot formula:  .~r
+## where &quot;.&quot; stands for &#39;iso&#39;, &#39;trans&#39;, &#39;theo&#39;
+## Recommended range of argument r: [0, 125]
+## Available range of argument r: [0, 125]
+## Unit of length: 1 metre</code></pre>
+<pre class="r"><code># Default plot method
+plot(pcf_bei)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+<pre class="r"><code># visualise the results
+plot(pcf_bei,
+     theo ~ r,
+     ylim = c(0,20),
+     main = &quot;&quot;,
+     col = &quot;grey70&quot;,
+     lwd = 2,
+     lty = &quot;dashed&quot;)
+
+plot(pcf_bei,
+     iso ~ r,
+     col = c(&quot;#046C9A&quot;),
+     lwd = 2,
+     add = T)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-19-2.png" width="768" /></p>
+<p>The estimator of the pair correlation function also assumes
+homogeneity. Here again, we can relax this assumption via the
+<code>pcfinhom()</code> function.</p>
+<pre class="r"><code># Estimate g corrected for inhomogeneity
+g_inhom &lt;- pcfinhom(bei)
+
+# visualise the results
+plot(g_inhom,
+     theo ~ r,
+     ylim = c(0,9),
+     main = &quot;&quot;,
+     col = &quot;grey70&quot;,
+     lwd = 2,
+     lty = &quot;dashed&quot;)
+
+plot(g_inhom,
+     iso ~ r,
+     col = c(&quot;#046C9A&quot;),
+     lwd = 2,
+     add = T)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-20-1.png" width="768" /></p>
+<p>Again, when corrected for inhomogeneity, the empirical deviations
+appear weaker than in the homogeneous case, and persist for only <span
+class="math inline">\(\sim\)</span> 20 meters. Simulation based methods
+can be used to help determine whether the observed clustering is
+significant.</p>
+<pre class="r"><code>#Simulation envelope (with points drawn from the estimated intensity)
+pcf_bei_inhom &lt;- envelope(bei,
+                          pcfinhom,
+                          simulate = expression(rpoispp(lambda_bei_pos)),
+                          rank = 1,
+                          nsim = 19)</code></pre>
+<pre><code>## Generating 19 simulations by evaluating expression  ...
+## 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+## 19.
+## 
+## Done.</code></pre>
+<pre class="r"><code># visualise the results
+par(mfrow = c(1,2))
+plot(pcf_bei_inhom)
+
+# Zoom in on range where significant deviations appear
+plot(pcf_bei_inhom,
+     xlim = c(0,35),
+     main = &quot;&quot;,
+     lwd = 2)</code></pre>
+<p><img src="02_Descriptives_files/figure-html/unnamed-chunk-21-1.png" width="768" /></p>
+<p>When corrected for homogeneity, there appear to be more trees than
+expected by random chance between <span
+class="math inline">\(\sim\)</span> 0 - 10 meters. Beyond that, the
+locations of trees appear not to exhibit any significant
+correlations.</p>
+<hr />
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li>Baddeley, A., Rubak, E. &amp; Turner, R. (2015). Spatial point
+patterns: methodology and applications with R. CRC press.</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+---
+title: "Assignment 02 - Exploratory Data Analysis"
+# author: "FirstName Lastname"
+# date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%OS')`"
+output:
+  html_document:
+    css: tutorial.css
+    fig_caption: yes
+    highlight: textmate
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=8, fig.height=6)
+```
+
+
+* * *
+
+Complete the following exercises within the lab period and submit to Canvas before leaving. In addition to the points detailed below, 5 points are assigned to the quality of the annotation and to the 'cleanliness' of the code and resulting pdf document. 
+
+## Exercise 1 -- 2 points
+
+We will again be working with the BC Parks dataset, which contains information on the locations of Provincial Parks in British Columbia. The parks belong to 5 different regions. There is also information on elevation (in m) contained within the dataset.
+
+* Import the BC park locations dataset and convert the data to a `ppp` object (being sure to include information on regions as marks).  -- 0.5 point(s)
+* Plot the resulting `ppp` object. The marks need to be visually distinct. -- 0.5 point(s)
+* Inspect the spatial distribution of parks. Do you expect the process to be homogeneous? Justify why you came to this expectation. -- 1 point(s)
+
+Note: You will need to load the `maptools` or `sp` packages and make use of the `as.owin()` function.
+
+```{r, message = FALSE}
+
+```
+
+
+## Exercise 2 -- 2 points
+
+* Under an assumption of homogeneity, what is the intensity of parks/km$^2$ in BC? -- 1 point(s)
+* Is the estimated intensity trustworthy? Why/why not? -- 1 point(s)
+
+Hint: see `?rescale`
+
+```{r}
+
+```
+
+## Exercise 3 -- 2 points
+
+* Use a quadrat test to determine whether the assumption of homogeneity is met. -- 1 point(s)
+Note: Be sure to set the number of quadrats appropriately, to avoid issues with the quadrat test.
+* Visualise both the quadrats and estimated intensity, being sure to include the points in each figure.  -- 1 point(s)
+* Is the estimated intensity from exercise 2 trustworthy, and why? -- 1 point(s)
+
+```{r}
+
+```
+
+
+## Exercise 4 -- 4 points
+
+* Estimate the intensity using kernel estimation with likelihood cross validation bandwidth selection.  -- 1 point(s)
+* Perform hotspot analysis to identify locations of elevated intensity.  -- 1 point(s)
+* Visualise the output (be sure to include the window).  -- 1 point(s)
+* Based on the estimated intensity and hotspot analysis, where would choose to go if you were planning a vacation to tour different provincial parks.  -- 1 point(s)
+
+```{r}
+
+```
+
+
+
+## Exercise 5 -- 3 points
+
+* Estimate $\rho$ for the locations of parks as a function of elevation.  -- 1 point(s)
+* Plot $\rho$ vs. elevation. Be sure that the x-axis for elevation does not go below 0.  -- 1 point(s)
+* Do you think that there is a relationship between elevation and park intensity? Use the results/data to support your statements.  -- 0.5 point(s)
+* Would you be more or less likely to find a park at 1500m compared to the average intensity of parks across B.C.? Why?  -- 0.5 point(s)
+
+Note: Estimating rho can be slow ($\sim$ 1-2 min). Be sure to leave enough time for the document to knit.
+
+```{r}
+
+```
+
+
+## Exercise 6 -- 5 points
+
+* Using Ripley's $K$-function, test for a significant (i.e., $\alpha$ = 0.05) correlation between park locations.  -- 4 point(s)
+* Is there any evidence of correlations in park locations? Why? -- 1 point(s)
+
+Notes: Use border corrections (i.e., `correction="border"`) and be sure the estimators assumptions are being met.
+
+```{r}
+
+```
+
+
+## Exercise 7 -- 3 points
+
+* Using simulation envelopes, estimate both the homogeneous and inhomogeneous pair correlation functions.  -- 1.5 point(s)
+* Visualise the results.  -- 0.5 point(s)
+* Are the estimates comparable? Which of these would you use to draw conclusions about the clustering of provincial parks? -- 0.5 point(s)
+* Are parks in BC clustered? -- 0.5 point(s)
+
+Note: These steps can be slow ($\sim$ 1-2 min). Be sure to leave enough time for the document to knit.
+
+```{r}
+
+```
+
+
+## Exercise 8 -- 3 points
+
+* Based on these descriptive statistics, what have you learned about the spatial distribution of parks in BC?
+
+
