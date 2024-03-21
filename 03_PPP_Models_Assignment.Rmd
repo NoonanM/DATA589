@@ -1,0 +1,109 @@
+---
+title: "Assignment 03 - Fitting and Validating Poisson Point Process Models"
+# author: "FisrtName LastName"
+# date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%OS')`"
+output:
+  html_document:
+    css: tutorial.css
+    fig_caption: yes
+    highlight: textmate
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+# DO NOT ALTER CODE IN THIS CHUNK
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.width=8, fig.height=6, fig.align = 'center')
+```
+
+
+* * *
+
+Complete the following exercises before the submission deadline. In addition to the points detailed below, 5 points are assigned to the quality of the annotation, as well as to the 'cleanliness' of the code and resulting pdf document.
+
+## Exercise 1 -- 1 point
+
+We will again be working with the BC Parks dataset, which contains information on the locations of Provincial Parks in British Columbia. The parks belong to 5 different regions. There is also information on elevation (in m) and percent forest cover contained within the dataset.
+
+* Import the BC park locations dataset and convert the data to a `ppp` object (for today you can exclude information on regions).  -- 1 point(s)
+
+Note: You will need to load the `maptools` package and make use of the `as.owin()` function.
+
+```{r}
+
+```
+
+## Exercise 2 -- 4 points
+
+* Estimate and plot $\rho$ for the locations of parks as a function of both elevation and forest cover (be sure that the x-axis for elevation does not go below 0).  -- 2 point(s)
+* Check for collinearity between elevation and forest cover (you will need to consider NA values).  -- 1 point(s)
+* Based on these initial analyses, write down the expected form of the model. Provide justification for this starting point.  -- 1 point(s)
+
+Note: Estimating rho can be slow ($\sim$ 1-2 min). Be sure to leave enough time for the document to knit.
+
+```{r}
+
+```
+
+## Exercise 3 -- 4 points
+
+* Fit the model you have defined in exercise 2 and inspect the model output. -- 1 point(s)
+* Fit a null, intercept only model.  -- 1 point(s)
+* Use AIC and a likelihood ratio test to determine if the model you defined is a better fit than the intercept only model.  -- 1 point(s)
+* Write down the equation for the selected model. -- 0.5 point(s)
+* Use this equation to estimate the intensity of parks at 500m elevation and 50% forest cover.
+
+```{r}
+
+```
+
+
+## Exercise 4 -- 4 points
+
+* Visualise the fitted model. Note: log scale the estimated intensity when plotting, ignore the standard error. You can use the `n` argument to adjust the resolution  -- 1 point(s)
+* Plot the effects of the individual coefficients. Note: use the median value(s) of the other coefficients.  -- 2 point(s)
+* Visually, do you think the model predictions are a good match to the data?  -- 1 point(s)
+
+```{r}
+
+```
+
+
+## Exercise 5 -- 1 point
+
+* Test whether the observed data deviate significantly from the model predictions. -- 1 point(s)
+
+```{r}
+
+```
+
+
+## Exercise 5 -- 2 points
+
+* Calculate and plot the model residuals.  -- 1 point(s)
+* Based on the residuals, do you think the model performing well?  -- 1 point(s)
+
+```{r}
+
+```
+
+
+## Exercise 6 -- 3 points
+
+* Calculate the partial residuals as a function of both elevation and forest cover.  -- 1 point(s)
+* Do you think that the terms are accurately capturing trends in the data?  -- 1 point(s)
+* Do you have enough information to further refine the model and improve it's accuracy?  -- 1 point(s)
+
+```{r}
+
+```
+
+
+## Exercise 7 -- 1 points
+
+* Based on these analyses, what have you learned about the spatial distribution of parks in BC?  -- 1 point(s)
+
+```{r}
+
+```

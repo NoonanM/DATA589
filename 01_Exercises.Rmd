@@ -1,0 +1,101 @@
+---
+title: "Assignment 01 - Introduction to the `spatstat` package"
+# author: "FirstName Lastname"
+# date: "`r format(Sys.time(), '%d %B, %Y %H:%M:%OS')`"
+output:
+  html_document:
+    css: tutorial.css
+    fig_caption: yes
+    highlight: textmate
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+# DO NOT ALTER CODE IN THIS CHUNK
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+* * *
+
+Complete the following exercises within the lab period and submit to Canvas before leaving. In addition to the points detailed below, 5 points are assigned to the quality of the annotation and to the 'cleanliness' of the code and resulting pdf document. 
+
+## Exercise 1 -- 5 points
+
+* Import the BC park locations dataset.  -- 0.5 point(s)
+* Identify the class of each element within the list.  -- 0.5 point(s)
+* Visualise each element within the list using methods appropriate to each object class.  -- 1 point(s)
+* Convert the data to a `ppp` object (be sure to include information on regions as marks).  -- 2 point(s)
+* Run `plot()` on the resulting `ppp` object. -- 0.5 point(s)
+* Briefly describe the dataset. -- 0.5 point(s)
+
+Note: You will need to load the `sp` package and make use of the `as.owin()` function.
+
+```{r}
+
+```
+
+
+## Exercise 2 -- 2 points
+
+* Refine the figure of the point pattern. You must modify at least 5 graphical parameters. The marks need to be visually distinct.   -- 2 point(s)
+
+```{r}
+
+```
+
+
+## Exercise 3 -- 5 points
+
+* Create a perspective plot of the elevation image. You must modify at least 10 arguments of the `persp` function and can not use the `viridis()` colour pallet shown in the lab example.  -- 4 point(s) 
+* Overlay the park locations.  -- 1 point(s) 
+
+```{r}
+
+```
+
+
+## Exercise 4 -- 2 points
+
+* Split the elevation image into 5 elevation 'classes'.  -- 0.5 point(s)
+* Plot the elevation class image and overlay the park locations.  -- 0.5 point(s)
+* Identify which of these elevation classes most parks fall in.  -- 1 point(s)
+
+Note: The `table()` function is useful here.
+
+```{r}
+
+```
+
+
+## Exercise 5 -- 3 points
+
+* Compute the distance from each park to its nearest neighbour.  -- 0.5 point(s)
+* Mark the parks with this information.  -- 0.5 point(s)
+* Plot the point pattern with information from these new marks.  -- 1 point(s)
+* Identify the most isolated park in BC.  -- 1 point(s)
+
+
+Note: The park names are stored in the `DATA` object.
+
+```{r}
+
+```
+
+## Exercise 6  -- 3 points
+
+* Calculate the median elevation within British Columbia and at park locations.  -- 1 point(s) 
+* Generate a kernel density estimate (KDE) of the distribution of elevation values within the province.  -- 0.5 point(s)
+* Generate a KDE of the distribution of elevation values at park locations.  -- 0.5 point(s)
+* Create a figure that overlays the two distributions.   -- 0.5 point(s)
+* Include a legend. -- 0.5 point(s)
+* Do think that the spatial distribution of parks is random with respect to elevation?  -- 0.5 point(s)
+* Identify both the highest and lowest elevation parks in BC.  -- 0.5 point(s)
+
+Note: You may need to use the `density()`, `lines()`, and `legend()` functions.
+
+```{r}
+
+```

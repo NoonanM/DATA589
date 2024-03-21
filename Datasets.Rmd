@@ -1,0 +1,28 @@
+---
+title: "Datasets for assignments"
+output: html_document
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This page contains the datasets needed to complete the assignments and project for this course. To download, left click on the links and download the files as needed.
+
+</br>
+
+***
+</br>
+
+### Assignments
+
+<a href="Datasets/BC_Parks.Rda" >BC Parks</a>
+
+</br>
+
+
+### Course Project
+
+<a href="Datasets/BC_Covariates.Rda" >BC Covariates</a>
+
+</br>

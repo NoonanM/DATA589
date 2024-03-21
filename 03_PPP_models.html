@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 03 - Fitting and Validating Poisson Point Process Models</title>
+
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="tutorial.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DATA 589 Spatial Statistics &mdash; UBC-Okanagan</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Lectures.html">Lectures</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Labs
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_spatstat.html">Lab 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives.html">Lab 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_models.html">Lab 03</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Exercises.html">Assignment 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives_Assignment.html">Assignment 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_Models_Assignment.html">Assignment 03</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Datasets.html">Datasets</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 03 - Fitting and Validating Poisson
+Point Process Models</h1>
+
+</div>
+
+
+<hr />
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p>We have covered methods for describing the spatial arrangement of
+points and answering questions such as “Are the points uniform?”, “Does
+the intensity depend on a covariate?”, “Are they clustered?” and so on…
+In asking these questions were are not really interested in the points
+<em>per se</em>, but in the <strong>process</strong> that generated the
+points. In order to be able to make general statements about how we
+expect points to be arranged, we need to model our system.</p>
+<p>In this lab we will:</p>
+<ul>
+<li>Learn how to model point patterns using Poisson point process
+models.</li>
+<li>Explore ways to visualise Poisson point process models.</li>
+<li>Learn how to estimate the relationships between points and
+covariates.</li>
+<li>Learn how to perform goodness-of-fit tests.</li>
+<li>Use diagnostic tools to Poisson point process refine models.</li>
+</ul>
+<p>In this lab we will again be using the <code>bei</code> dataset. This
+is a point pattern giving the locations of 3605 trees in a tropical rain
+forest in Panama. Accompanied by covariate data giving the elevation and
+slope in the study region. The supporting covariate information is
+stored in a seperate object called <code>bei.extra</code>.</p>
+<hr />
+</div>
+<div id="poisson-point-process" class="section level2">
+<h2>Poisson Point Process</h2>
+<p>A point process, <strong>X</strong>, is a random (in the statistical
+sense) process whose outcome is a ‘point pattern’. A point pattern is a
+set <span class="math inline">\(\mathbf{x} = \{x_1,x_2,...\}\)</span> of
+points in a two-dimensional space (although the concepts translate to
+higher or lower dimensions), which has a finite number of points in any
+bounded region <span class="math inline">\(B\)</span> (i.e., <span
+class="math inline">\(n(\mathbf{x} \cap B)\)</span> is finite). This
+implies that for any bounded region <span
+class="math inline">\(B\)</span>, the number of points <span
+class="math inline">\(n(\mathbf{x} \cap B)\)</span> is a well-defined
+random variable.</p>
+<p>Under an assumption of <strong>homogeneity</strong>, the expected
+number of points falling in any region <span
+class="math inline">\(B\)</span> is proportional to its area <span
+class="math inline">\(|B|\)</span>:</p>
+</br>
+<center>
+<span class="math inline">\(\mathbb{E} n(\mathbf{x} \cap B) = \lambda
+|B|\)</span>
+</center>
+<p></br></p>
+<p>Under an assumption of <strong>independence</strong>, <span
+class="math inline">\(n(\mathbf{x} \cap A)\)</span> provides no
+information on <span class="math inline">\(n(\mathbf{x} \cap
+B)\)</span>, which in turn implies that the number of points falling in
+bounded regions are independent random variables. Because we assume that
+the property of independence should hold for regions of any shape and/or
+size, taking finer and finer spatial subdivisions (i.e., the area of
+<span class="math inline">\(B \to 0\)</span>) results in more and more
+independent random variables. When the size of the squares is extremely
+small, most will be empty and there is a negligible probability that a
+square will have $&gt;$1 point. This implies that <span
+class="math inline">\(n(\mathbf{X} \cap B)\)</span> is the number of
+successes in a large number of independent trials, which implies that
+<span class="math inline">\(n(\mathbf{X} \cap B)\)</span> follows a
+Poisson distribution. Because <span class="math inline">\(\mathbb{E}
+n(\mathbf{x} \cap B) = \lambda |B|\)</span>, this means that <span
+class="math inline">\(n(\mathbf{X} \cap B)\)</span> is a Poisson
+distributed random variable with mean <span
+class="math inline">\(\lambda |B|\)</span>.</p>
+<p>We are therefore dealing with a Poisson point processes that is
+described by an intensity function <span
+class="math inline">\(\lambda(u)\)</span>, which implies we need to
+build a statistical model that estimates <span
+class="math inline">\(\lambda(u)\)</span> (i.e., <span
+class="math inline">\(\lambda(u)\)</span> = some function). If a point
+processes is homogeneous, <span
+class="math inline">\(\lambda(u)\)</span> is constant in space and
+defined by an unknown baseline intensity <span
+class="math inline">\(\alpha\)</span> that must be estimated intensity
+function (i.e., similar to an intercept only model in a linear
+regression context).</p>
+</br>
+<center>
+<span class="math inline">\(\lambda(u) = \alpha\)</span>
+</center>
+<p></br></p>
+<p>If a point is processes is inhomogeneous, <span
+class="math inline">\(\lambda(u)\)</span> is not constant in space but
+rather a function of some covariate(s)</p>
+</br>
+<center>
+<span class="math inline">\(\lambda(u) = \alpha + \beta Z(u)\)</span>
+</center>
+<p></br></p>
+<p>where <span class="math inline">\(\alpha\)</span> is the baseline
+intensity, <span class="math inline">\(Z(u)\)</span> is our spatial
+covariate at locations <span class="math inline">\(u\)</span>, and <span
+class="math inline">\(\beta\)</span> is our unknown covariate effect
+that must be estimated. Depending on the values of <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\beta\)</span>, it is conceivably possible to
+obtain negative values for <span
+class="math inline">\(\lambda(u)\)</span>, which is impossible. We
+therefore add a log-link function and exponentiate our model</p>
+</br>
+<center>
+<span class="math inline">\(\lambda(u) = e^{\alpha + \beta_1 Z_1(u) +
+\beta_2 Z_2(u) ... + \beta_i Z_i(u)}\)</span>
+</center>
+<p></br></p>
+<p>Modelling an inhomogeneous Poisson point processes therefore means
+specifying the form of the model and estimating the unknown coefficients
+that best described the observed point pattern dataset. Fitting a
+Poisson point processes in <code>R</code> involves using the
+<code>spatstat::ppm()</code> function, which we will explore in this
+lab.</p>
+<div id="ppp-pre-analysis" class="section level3">
+<h3>PPP Pre-analysis</h3>
+<div id="relationships-with-covariates" class="section level4">
+<h4>Relationships with covariates</h4>
+<p>When fitting models to model data, we are usually interested in
+determining whether the intensity depends on a covariate(s). Because the
+form of the underlying deterministic model is unknown, we often start
+from an arbitrarily complex model that we then try to refine (based on
+the observed points and model behaviour). A good starting place is to
+visualise the data in different ways to get a feeling for what models
+would be reasonable. For instance, if we are interested in modelling
+<span class="math inline">\(\lambda(u)\)</span> as a function of
+covariates <span class="math inline">\(Z(u)\)</span>, we can use the
+<code>rhohat()</code> function to help us identify a reasonable starting
+model.</p>
+<pre class="r"><code>#load the spatstat package
+library(spatstat)
+
+#Load in the bei dataset
+data(&quot;bei&quot;)
+
+#Estimate Rho for elevation
+rho_elev &lt;- rhohat(bei, bei.extra$elev)
+
+#Estimate Rho for gradient
+rho_grad &lt;- rhohat(bei, bei.extra$grad)
+
+par(mfrow = c(1,2))
+plot(rho_elev,
+     main = &quot;&quot;,
+     xlab = &quot;Elevation (m)&quot;)
+plot(rho_grad,
+     main = &quot;&quot;,
+     xlab = &quot;Gradient (degrees)&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-2-1.png" width="768" /></p>
+<p>These figures suggest that there is likely to be a relationship
+between the number of <em>Beilschmiedia pendula</em> trees and both
+elevation and gradient. These relationships appear to be non-linear with
+the highest intensity of trees occurring at intermediate elevations and
+gradients.</p>
+</div>
+<div id="collinearity" class="section level4">
+<h4>Collinearity</h4>
+<p>It is possible that slope and elevation are correlated, which would
+cause identifiability issues when modelling the locations of <em>B.
+pendula</em>. When fitting models with a number of potentially
+correlated variables, it is recommended that you always check for
+collinearity (i.e., correlations between variables). In
+<code>spatstat</code>, this can be done via the <code>cor.im()</code>
+function.</p>
+<pre class="r"><code>#Check for collinearity
+cor.im(bei.extra)</code></pre>
+<pre><code>##            elev       grad
+## elev  1.0000000 -0.3547234
+## grad -0.3547234  1.0000000</code></pre>
+<pre class="r"><code>#Visualise the relationship
+plot(bei.extra$grad$v ~ bei.extra$elev$v,
+     xlab = &quot;Elevation (m)&quot;,
+     ylab = &quot;Gradient (degrees)&quot;,
+     pch = 16,
+     cex = 0.3,
+     col = &quot;#046C9A&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>Although there are some patterns in the scatterplot of elevation
+vs. gradient, the correlation coefficients are relatively weak, so we
+can proceed without too much worry.</p>
+</div>
+</div>
+<div id="model-fitting" class="section level3">
+<h3>Model fitting</h3>
+<p>Based on these initial visualisations, a reasonable form for the
+model might be</p>
+</br>
+<center>
+<span class="math inline">\(\lambda_{\mathrm{\textit{B. pendula}}}(u) =
+e^{\beta_0 + \beta_1~\mathrm{elevation}(u) +
+\beta_2~\mathrm{elevation}(u)^2 + \beta_3~\mathrm{gradient}(u) +
+\beta_4~\mathrm{gradient}(u)^2}\)</span>
+</center>
+<p></br></p>
+<p>We can fit this model using the <code>ppm()</code> function. As a
+note, the data argument in the <code>ppm()</code> function defines the
+values of spatial covariates (usually an <code>im</code> class object),
+and the response variable is a <code>ppp</code> class object. In other
+words, the function uses different objects in <code>R</code>
+environment. This is different from most model fitting functions in
+<code>R</code>, so care should be taken when naming variables/objects in
+your environment. Also note the use of the <code>I()</code> function,
+which serves to ensure that <code>^</code> is used as an arithmetical
+operator and not a formula operator.</p>
+<pre class="r"><code>#Fit the PPP model
+fit &lt;- ppm(bei ~ elev + I(elev^2) + grad + I(grad^2), data = bei.extra)
+
+fit</code></pre>
+<pre><code>## Nonstationary Poisson process
+## Fitted to point pattern dataset &#39;bei&#39;
+## 
+## Log intensity:  ~elev + I(elev^2) + grad + I(grad^2)
+## 
+## Fitted trend coefficients:
+##   (Intercept)          elev     I(elev^2)          grad     I(grad^2) 
+## -1.384401e+02  1.816477e+00 -6.218832e-03  2.071683e+01 -6.082166e+01 
+## 
+##                  Estimate         S.E.       CI95.lo       CI95.hi Ztest
+## (Intercept) -1.384401e+02 6.9492129650 -1.520604e+02 -1.248199e+02   ***
+## elev         1.816477e+00 0.0964628469  1.627413e+00  2.005541e+00   ***
+## I(elev^2)   -6.218832e-03 0.0003343707 -6.874186e-03 -5.563477e-03   ***
+## grad         2.071683e+01 1.0843583577  1.859153e+01  2.284214e+01   ***
+## I(grad^2)   -6.082166e+01 4.2948144234 -6.923935e+01 -5.240398e+01   ***
+##                  Zval
+## (Intercept) -19.92170
+## elev         18.83084
+## I(elev^2)   -18.59861
+## grad         19.10515
+## I(grad^2)   -14.16165</code></pre>
+<p>The coefficients are all statistically significant, and suggest that
+<span class="math inline">\(\lambda_{\mathrm{\textit{B.
+pendula}}}(u)\)</span> can be estimated as:</p>
+</br>
+<center>
+<span class="math inline">\(\lambda_{\mathrm{\textit{B. pendula}}}(u) =
+e^{-1.4~+~1.8~\mathrm{elevation}(u)~-~6.2~\mathrm{elevation}(u)^2~+~2.1~\mathrm{gradient}(u)~-~6.1~\mathrm{gradient}(u)^2}\)</span>
+</center>
+<p></br></p>
+<div id="model-visualisation" class="section level4">
+<h4>Model visualisation</h4>
+<p>Seeing the summary output is useful, but perhaps not the easiest way
+to interpret the fitted model, and certainly not one of the more
+effective ways of communicating the results to broader audiences.
+Visualisations help us here.</p>
+<p>We can run <code>plot()</code> on a <code>ppm</code> class object,
+which plots the predicted values of <span
+class="math inline">\(\lambda_{\mathrm{\textit{B. pendula}}}(u)\)</span>
+over the observation window as a function of the estimated coefficients
+and covariate values.</p>
+<pre class="r"><code>#Plot the model predictions
+plot(fit,
+     se = FALSE,
+     superimpose = FALSE)
+
+#Overlay the B. pendula locations
+plot(bei,
+     pch = 16,
+     cex = 0.6,
+     cols = &quot;white&quot;,
+     add = TRUE)
+plot(bei,
+     pch = 16,
+     cex = 0.5,
+     cols = &quot;black&quot;,
+     add = TRUE)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>The predicted values of <span
+class="math inline">\(\lambda_{\mathrm{\textit{B. pendula}}}(u)\)</span>
+are a function of all of the fitted covariates. Because the point
+process occurs over two dimensions, it can be difficult to understand
+how the individual coefficients in-and-of-themselves influence <span
+class="math inline">\(\lambda_{\mathrm{\textit{B.
+pendula}}}(u)\)</span>. We can use the <code>effectfun()</code> function
+to compute the intensity of a fitted point process model as a function
+of one of its covariates.</p>
+<pre class="r"><code>#Mean slope
+E_grad &lt;- mean(bei.extra$grad)
+
+#Elevational effect on lambda at mean gradient
+elev_effect &lt;- effectfun(fit, &quot;elev&quot;, grad = E_grad, se.fit = T)
+
+
+#Mean elevation
+E_elev &lt;- mean(bei.extra$elev)
+
+#Slope effect on lambda at mean elevation
+elev_grad&lt;- effectfun(fit, &quot;grad&quot;, elev = E_elev, se.fit = T)
+
+#Side by side plotting
+par(mfrow = c(1,2))
+#Plot the elevation effect 
+plot(elev_effect,
+     legend = FALSE,
+     main = &quot;Elevational effect at mean gradient&quot;)
+
+#Plot the slope effect 
+plot(elev_grad,
+     legend = FALSE,
+     main = &quot;Effect of gradient at mean elevation&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+</div>
+</div>
+<div id="model-selection" class="section level3">
+<h3>Model Selection</h3>
+<p>On the surface, the more complex model makes sense given the observed
+patterns and the significant coefficients, but how do we know whether
+the additional complexity is supported by the data? Usefully, PPPs are
+amenable to standard model selection criteria such as AIC based mdoel
+selection or likelihood ratio tests (LRTs).</p>
+<p>The quadratic term on gradient is significant, but the figure of
+<span class="math inline">\(\rho(x)\)</span> vs gradient may be
+reasonably approximated by a straight line. To ensure we’re not
+overfitting, we can use the <code>AIC()</code> function to calculate the
+AIC value of the fitted model, and compare it to a reduced model without
+a quadratic effect on gradient.</p>
+<pre class="r"><code>#Fit the PPP model
+fit_reduced &lt;- ppm(bei ~ elev + I(elev^2) + grad, data = bei.extra)
+
+#AIC values
+AIC(fit); AIC(fit_reduced)</code></pre>
+<pre><code>## [1] 41572.67</code></pre>
+<pre><code>## [1] 41809.2</code></pre>
+<pre class="r"><code>#Delta AIC
+AIC(fit_reduced) - AIC(fit)</code></pre>
+<pre><code>## [1] 236.524</code></pre>
+<p>With a <span class="math inline">\(\Delta\)</span>AIC of ca. 236, the
+extra complexity is well supported by the data.</p>
+</div>
+<div id="model-validation" class="section level3">
+<h3>Model Validation</h3>
+<p>Model selection can tell us which models from a pool of candidates
+have the best support given our observations, but it doesn’t tell us
+anything about how well our model does at predicting the occurrence of .
+When we fit a model to some data we are always assuming that the model
+has been correctly specified. In addition, when we use software to fit a
+model to some data it will always estimate some coefficients even if the
+model is a poor fit to the data. It is therefore critical to evaluate a
+model’s behaviour to ensure that it is a reasonable fit to the data.</p>
+<div id="quadrat-counting" class="section level4">
+<h4>Quadrat counting</h4>
+<p>After fitting a model, we are saying that the intensity at any
+location <span class="math inline">\(u\)</span> is <span
+class="math inline">\(\lambda_\theta(u)\)</span>, where <span
+class="math inline">\(\theta\)</span> are the values of our parameters.
+Under a null hypothesis that the intensity is <span
+class="math inline">\(\lambda_\theta(u)\)</span>, then the expected
+number of points falling in each quadrats, <span
+class="math inline">\(B_j\)</span>, is <span
+class="math inline">\(\mu_j\)</span>, where</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\mu}_j = \int_{B_j}\lambda_{\hat{\theta}}(u)du
+\end{align*}\]</span></p>
+<p>We can therefore test for significant deviations from <span
+class="math inline">\(\lambda_\theta(u)\)</span> using a <span
+class="math inline">\(\chi^2\)</span> test via the
+<code>quadrat.test()</code>.</p>
+<pre class="r"><code>#Run the quadrat test
+quadrat.test(fit, nx = 4, ny = 2)</code></pre>
+<pre><code>## 
+##  Chi-squared test of fitted Poisson model &#39;fit&#39; using quadrat counts
+## 
+## data:  data from fit
+## X2 = 439.04, df = 3, p-value &lt; 2.2e-16
+## alternative hypothesis: two.sided
+## 
+## Quadrats: 4 by 2 grid of tiles</code></pre>
+<p>The small p value tells us that there’s a significant deviation from
+our model’s predictions. While this is useful for suggesting that our
+model has room for improvement, it provides us with no direction on how
+to do so (e.g., missing parameters, model mispecification (e.g.,
+polynomial vs. linear), a lack of independence, non-stationarity,
+etc…).</p>
+</div>
+<div id="ppp-residuals" class="section level4">
+<h4>PPP Residuals</h4>
+<p>A fitted statistical model will never (or at least very rarely) be a
+perfect representation of what’s happening in the real world, and there
+will almost always be deviations between what actually happened (i.e.,
+the observed values), and what the model predicted would happen (i.e.,
+the predicted values). The difference between the predicted and observed
+value is called the residual. A point process residual is the observed
+number of points falling in any region <span
+class="math inline">\(B\)</span>, <span
+class="math inline">\(n(\mathbf{x}\cap B)\)</span>, minus the expected
+number of points, <span
+class="math inline">\(\int_{B}\lambda_{\hat{\theta}}(u)du\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\mathrm{Residual} &amp;= \mathrm{Observed} - \mathrm{Predicted} \\
+R(B) &amp;= n(\mathbf{x}\cap B) - \int_{B}\lambda_{\hat{\theta}}(u)du
+\end{align*}\]</span></p>
+<p>The residuals of a PPP model are calculated using the
+<code>residuals()</code> function.</p>
+<pre class="r"><code>#Calculate the residuals
+res &lt;- residuals(fit)
+
+#Visualise
+plot(res,
+     cols = &quot;transparent&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+<p>If a model is accurately capturing the trends in a dataset, there
+should be no obvious patterns in the residuals. This is clearly not the
+case. Our model over-predicts the intensity in some areas, and
+under-predicts it in others, with clear patterns in how it does so.
+While this still does nothing for identifying the cause of the problem,
+it tells us that there is a need for improvement.</p>
+<p>One way to see how well our model is behaving is to calculate the
+relative intensity as a function of the different covariates in our
+model. We can do this using the <code>rhohat()</code> function.</p>
+<pre class="r"><code>#Calculate the relative intensity as a function of elevation
+rh_elev &lt;- rhohat(fit, bei.extra$elev)
+
+#Calculate the relative intensity as a function of gradient
+rh_grad &lt;- rhohat(fit, bei.extra$grad)
+
+#Side by side plotting
+par(mfrow = c(1,2))
+plot(rh_elev,
+     legend = FALSE,
+     main = &quot;&quot;,
+     xlab = &quot;Elevation (m)&quot;)
+plot(rh_grad,
+     legend = FALSE,
+     main = &quot;&quot;,
+     xlab = &quot;Gradient (degrees)&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<p>From these diagnostic figures, we can see that our model is behaving
+reasonably well, but it has a tendency to over-predict <span
+class="math inline">\(\lambda_{\mathrm{\textit{B. pendula}}}(u)\)</span>
+at both low elevations and steep gradients. To get a better feel for how
+we should specify our elevation and gradient effects, we can use partial
+residual plots, which show the fitted effect of a covariate alongside
+the observed effect.</p>
+<pre class="r"><code>#Calculate the partial residuals as a function of elevation
+par_res_elev &lt;- parres(fit, &quot;elev&quot;)
+
+#Calculate the relative intensity as a function of gradient
+par_res_grad &lt;- parres(fit, &quot;grad&quot;)
+
+#Side by side plotting
+par(mfrow = c(1,2))
+plot(par_res_elev,
+     legend = FALSE,
+     lwd = 2,
+     main = &quot;&quot;,
+     xlab = &quot;Elevation (m)&quot;)
+plot(par_res_grad,
+     legend = FALSE,
+     lwd = 2,
+     main = &quot;&quot;,
+     xlab = &quot;Gradient (degrees)&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<p>From these figures we can see that the quadratic terms are not
+capturing the patterns in our data particularly well. As an improvement,
+we could try adding higher-order polynomials, but polynomials can be
+unstable. In this situation, it may be worth switching from a linear
+modelling framework, to an additive modelling framework (i.e., GAMs). We
+are not covering GAMs in this course, but, in essence, they allow for
+more flexible covariate effects. These models can be fit via
+<code>ppm()</code> by using tools from the <code>splines</code> package,
+and ensuring that we set <code>use.gam = TRUE</code>, so that the models
+are fit via <code>gam()</code> and not <code>glm()</code>.</p>
+<pre class="r"><code>library(splines)
+
+#Fit the PPP model
+fit_smooth &lt;- ppm(bei ~ bs(elev,7) + bs(grad, 8), data = bei.extra, use.gam = TRUE)
+
+fit_smooth</code></pre>
+<pre><code>## Nonstationary Poisson process
+## Fitted to point pattern dataset &#39;bei&#39;
+## 
+## Log intensity:  ~bs(elev, 7) + bs(grad, 8)
+## 
+## Fitted trend coefficients:
+##  (Intercept) bs(elev, 7)1 bs(elev, 7)2 bs(elev, 7)3 bs(elev, 7)4 bs(elev, 7)5 
+##  -7.97211777  -1.27969432   1.30529587   1.27904452   1.57196052   2.00105521 
+## bs(elev, 7)6 bs(elev, 7)7 bs(grad, 8)1 bs(grad, 8)2 bs(grad, 8)3 bs(grad, 8)4 
+##  -0.02708757  -0.47558713   1.03473145   0.32977830   2.04509304   1.74480164 
+## bs(grad, 8)5 bs(grad, 8)6 bs(grad, 8)7 bs(grad, 8)8 
+##   2.06928842   2.72359874   1.45166137   2.69741408 
+## 
+## For standard errors, type coef(summary(x))</code></pre>
+<pre class="r"><code>#Calculate the partial residuals as a function of elevation
+par_res_elev &lt;- parres(fit_smooth, &quot;elev&quot;)
+
+#Calculate the relative intensity as a function of gradient
+par_res_grad &lt;- parres(fit_smooth, &quot;grad&quot;)
+
+#Side by side plotting
+par(mfrow = c(1,2))
+plot(par_res_elev,
+     legend = FALSE,
+     lwd = 2,
+     main = &quot;&quot;,
+     xlab = &quot;Elevation (m)&quot;)
+plot(par_res_grad,
+     legend = FALSE,
+     lwd = 2,
+     main = &quot;&quot;,
+     xlab = &quot;Gradient (degrees)&quot;)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p>The models look like a much better fit to the data, but we have added
+a lot of complexity. To ensure we are not overfitting, we can again use
+our model selection techniques.</p>
+<pre class="r"><code>#AIC values
+AIC(fit); AIC(fit_smooth)</code></pre>
+<pre><code>## [1] 41572.67</code></pre>
+<pre><code>## [1] 41346.02</code></pre>
+<pre class="r"><code>#Delta AIC
+AIC(fit) - AIC(fit_smooth)</code></pre>
+<pre><code>## [1] 226.6518</code></pre>
+<pre class="r"><code>#Likelihood ratio test
+anova(fit, fit_smooth, test = &quot;LRT&quot;)</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: ~elev + I(elev^2) + grad + I(grad^2)     Poisson
+## Model 2: ~bs(elev, 7) + bs(grad, 8)   Poisson
+##   Npar Df Deviance  Pr(&gt;Chi)    
+## 1    5                          
+## 2   16 11   248.65 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>All lines of evidence point towards these more complex models being a
+better fit to the data. The final model is too long to write down, but
+we can visualise the predictions just as before.</p>
+<pre class="r"><code>#Plot the model predictions
+plot(fit_smooth,
+     se = FALSE,
+     superimpose = FALSE,
+     main = &quot;Estimated Beilschmiedia pendula intensity&quot;)
+
+#Overlay the B. pendula locations
+plot(bei,
+     pch = 16,
+     cex = 0.6,
+     cols = &quot;white&quot;,
+     add = TRUE)
+plot(bei,
+     pch = 16,
+     cex = 0.5,
+     cols = &quot;black&quot;,
+     add = TRUE)</code></pre>
+<p><img src="03_PPP_models_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p>There are still locations where the model seems to not be a
+particularly good match to the data, but it is actually performing
+reasonably well considering that we are predicting the locations of one
+species of trees in a biodiverse forest based on only slope and
+elevation, and have no information on all of the many other factors that
+might influence trees (e.g., soil moisture, soil ph, soil type,
+competition from other species, etc…).</p>
+<hr />
+</div>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li>Baddeley, A., Rubak, E. &amp; Turner, R. (2015). Spatial point
+patterns: methodology and applications with R. CRC press.</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

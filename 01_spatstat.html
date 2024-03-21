@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Lab 01 - Introduction to the spatstat package</title>
+
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="tutorial.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">DATA 589 Spatial Statistics &mdash; UBC-Okanagan</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Lectures.html">Lectures</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Labs
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_spatstat.html">Lab 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives.html">Lab 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_models.html">Lab 03</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Exercises.html">Assignment 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives_Assignment.html">Assignment 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_Models_Assignment.html">Assignment 03</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Datasets.html">Datasets</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Lab 01 - Introduction to the
+<code>spatstat</code> package</h1>
+
+</div>
+
+
+<hr />
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p>A spatial point pattern is a dataset comprised of the locations of
+‘things’ or ‘events’. This might be the locations of trees in a forest,
+road traffic accidents, crimes, incidents of diseases, etc… For these
+data, the spatial arrangement of the points is the focus of
+investigation. Depending on your analytical aims, this might be a
+description of spatial trends in the density of points, relationships
+with covariates, or so on. The analysis of point patterns can provide
+key evidence in many fields of research (e.g., ecology, epidemiology,
+geoscience, astronomy, crime research, cell biology, econometrics).</p>
+<p>In this lab we will:</p>
+<ul>
+<li>Learn how to import point data into the <code>spatstat</code>
+package.</li>
+<li>Learn how to add marks to a point pattern and estimate the
+observation window.</li>
+<li>Explore ways to visualise point patterns and images.</li>
+<li>Learn how to extract and modify the information contained in
+<code>ppp</code> objects.</li>
+</ul>
+<hr />
+</div>
+<div id="importing-point-data-into-spatstat" class="section level2">
+<h2>Importing point data into <code>spatstat</code></h2>
+<p>At its simplest, a spatial point dataset is comprised of the
+locations of ‘things’ or ‘events’ (i.e., a series of x and y
+coordinates). In <code>spatstat</code>, these data are stored in an
+object of class <code>ppp</code> (i.e., a planar point pattern). Before
+the analytical tools available within the <code>spatstat</code> package
+can be used, point data need to first be imported and converted into a
+<code>ppp</code> object.</p>
+<p>Assuming you have already installed the <code>spatstat</code>
+package, the first step of any analysis is to import the package and
+dataset(s). Here we will work with point data on synaptic vesicles
+observed in rat brain tissue. These data were used to support work by
+Khanmohammadi et al. (2014).</p>
+<p>These data are part of the <code>spatstat</code> package, and stored
+as a .txt file in a folder that is generated when the package is
+installed. We could have loaded these data by calling
+<code>data(vesicles)</code>, but the process described below mimics a
+more realistic workflow where you would be importing data stored locally
+on your computer.</p>
+<pre class="r"><code>#load the spatstat package
+library(spatstat)
+
+#Define the file path to the dataset
+path &lt;- system.file(&quot;rawdata/vesicles/vesicles.txt&quot;, package = &quot;spatstat.data&quot;)
+
+#Import the vesicles dataset
+vesicles &lt;- read.table(path,
+                       header = TRUE)
+
+#Visualise the data
+plot(y ~ x,
+     pch = 16,
+     col = &quot;#046C9A&quot;,
+     data = vesicles)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-2-1.png" width="768" /></p>
+<p>Importing point data into <code>R</code> is fairly straightforward
+and similar to many other workflows, but, unlike with other packages,
+converting these data to a <code>ppp</code> object requires additional
+information on the sampling window. There are several ways to do this,
+but we will explore an option based on importing information on the
+coordinates of a ‘bounding box’. This approach assumes you have
+information on the coordinates defining the edge of a sampling window
+stored in a data file (e.g., a .txt or .csv file) . The process is
+fairly straightforward and involves importing the coordinates and
+converting them to an <code>owin</code> object using the
+<code>owin()</code> function. Depending on the complexity of the window,
+this may involve converting a dataset into a list, as shown in the
+example below.</p>
+<pre class="r"><code># Import the locations of the 
+path &lt;- system.file(&quot;rawdata/vesicles/vesicleswindow.txt&quot;, package = &quot;spatstat.data&quot;)
+
+ves_win &lt;- read.table(path,
+                      header = TRUE)
+
+
+# Convert to a list with each element containing information on each &quot;piece&quot;
+# This is because there is a hole in the window.
+ves_win_stack &lt;- list()
+ves_win_stack[[1]] &lt;- ves_win[which(ves_win$id == 1),]
+ves_win_stack[[2]] &lt;- ves_win[which(ves_win$id == 2),]
+
+
+#Convert the list to an owin object
+ves_win &lt;- owin(poly = ves_win_stack)
+
+#Visualise the window
+plot(ves_win,
+     main = &quot;Observation Window&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>Once the window is defined, converting a dataset into a
+<code>ppp</code> object is relatively straighforward and involves the
+<code>ppp()</code> function.</p>
+<pre class="r"><code>#Convert to a ppp object
+vesicles_ppp &lt;- ppp(x = vesicles$x, # X coordinates
+                    y = vesicles$y, # Y coordinates
+                    window = ves_win) # Observation window
+
+#Visualise the dataset
+plot(vesicles_ppp,
+     pch = 16,
+     cols = &quot;#046C9A&quot;,
+     main = &quot;Vesicles point data&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<div id="estimating-the-window" class="section level3">
+<h3>Estimating the window</h3>
+<p>If you only had point data and no information on the window, the
+<code>spatstat</code> package has methods for estimating the observation
+window. One option is to use the <code>ripras()</code> function, which
+computes the Ripley-Rasson estimate of the spatial domain from which a
+particular set of data came.</p>
+<pre class="r"><code>#Estimate the sampling window
+est_win &lt;- ripras(x = vesicles$x, y = vesicles$y)
+
+
+#Convert to a ppp object
+vesicles_ppp_2 &lt;- ppp(x = vesicles$x, # X coordinates
+                      y = vesicles$y, # Y coordinates
+                      window = est_win) # Observation window
+
+#Visualise the two datasets
+par(mfrow = c(1,2))
+plot(vesicles_ppp,
+     pch = 16,
+     cols = &quot;#046C9A&quot;,
+     main = &quot;True Window&quot;)
+
+plot(vesicles_ppp_2,
+     pch = 16,
+     cols = &quot;#046C9A&quot;,
+     main = &quot;Estimated Window&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>While this approach can serve as a reasonable solution for situations
+when the window is unknown, it risks biasing any downstream estimates,
+and any resulting inference should be approached with caution.</p>
+</div>
+<div id="marked-point-patterns" class="section level3">
+<h3>Marked point patterns</h3>
+<p>Sometimes we have points of several types, or a marked point pattern
+(i.e., auxiliary information). While the original vesicles dataset does
+not contain any ‘marks’ we can easily add some randomly generated
+supporting information for demonstration purposes.</p>
+<pre class="r"><code>#Randomly assign a &quot;group&quot;
+group &lt;- as.logical(rbinom(n = nrow(vesicles), size = 1, p = 0.5))
+
+#Randomly define a &quot;size&quot;
+size &lt;- rgamma(n = nrow(vesicles), shape = 1)
+
+#Assign the supporting information to the point pattern
+marks(vesicles_ppp) &lt;- data.frame(Group = group,
+                                  Size = size)
+
+#Visualise the result
+plot(vesicles_ppp,
+     main = &quot;Marked Point Pattern&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<hr />
+</div>
+</div>
+<div id="inspecting-and-exploring-data" class="section level2">
+<h2>Inspecting and Exploring data</h2>
+<div id="plotting-methods" class="section level3">
+<h3>Plotting methods</h3>
+<div id="plotting-a-point-pattern" class="section level4">
+<h4>Plotting a point pattern</h4>
+<p>As shown above, running plot on <code>spatstat</code> objects will
+generate simple plots of point pattern datasets and features (e.g.,
+marks, windows, etc.). Effective plots of spatial data are critical for
+communication, and typically requires bespoke modifications of standard,
+default plotting methods. We will explore some of these options
+here.</p>
+<p>The default <code>plot</code> method for <code>ppp</code> objects
+displays the observation window, the points, as well as information on
+all marks associated with the dataset. For information see
+<code>help("plot.ppp")</code>. The defaults are useful for a quick,
+‘on-the-fly’ visualisation, but are rarely useful for scientific
+communication. Depending on your needs there is a lot of flexibility in
+how these figures can be made to look.</p>
+<pre class="r"><code>library(viridis)
+
+#Define a colour pallet to use
+col_pal &lt;- colourmap(magma(128), range = range(size))
+
+#Refine the figure
+plot(vesicles_ppp, # The dataset to visualise
+     which.marks = &quot;Size&quot;, # Which mark to use
+     col = &quot;grey30&quot;, #The colour of the window
+     cols = col_pal, #The colours of the points
+     pch = 16, # The plotting symbol
+     main = &quot;Vesicle sites&quot;, # The title
+     par(bg=&quot;grey90&quot;, cex.main = 3), # Flexible modification of the graphical parameters
+     legend = F) # Turn of the legend depending on needs</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+</div>
+<div id="plotting-a-window" class="section level4">
+<h4>Plotting a window</h4>
+<p>In some cases we might be interested in the window alone. This can be
+done by extracting the window from the <code>ppp</code> object.</p>
+<pre class="r"><code>plot(vesicles_ppp$window,
+     col = rgb(0,0,0,0.2))</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p>The above plot is simple, but it can be modified as needed. See
+<code>help("plot.owin")</code> for details.</p>
+</div>
+<div id="plotting-an-image" class="section level4">
+<h4>Plotting an image</h4>
+<p>Sometimes a point pattern will be accompanied by a continuously
+varying co-variate. In <code>spatstat</code> these covariates are
+imported as ‘images’. Depending on the information contained in these
+covariates, they can be visualised in two, or three dimensions. By
+default, the 3 dimensional perspective plots can be challenging to
+interpret, but they are very flexible and can produce high quality
+images (see: <code>help("persp")</code>). The default plotting methods
+for 2 dimensional plots of images are redily interpretable, so we will
+not explore them in detail here. If you want to modify them, see
+<code>help("plot.im")</code>.</p>
+<p>To demonstrate how to visualise images, we will use the
+<code>bei</code> dataset. This is a point pattern giving the locations
+of 3605 trees in a tropical rain forest in Panama. Accompanied by
+covariate data giving the elevation (altitude) and slope of elevation in
+the study region. The supporting information is stored in an object
+called <code>bei.extra</code>.</p>
+<pre class="r"><code>#Load in the data
+data(&quot;bei&quot;)
+
+plot(bei.extra$elev)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+<pre class="r"><code>persp(bei.extra$elev)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-9-2.png" width="768" /></p>
+<pre class="r"><code>fig &lt;- persp(bei.extra$elev, # source data
+             theta = -45, phi = 18, # rotation
+             expand = 7, # z-axis expansion
+             border = NA, #remove grid borders
+             apron = TRUE, #apron around edge
+             shade = 0.3, # shading
+             box = FALSE, # axes on/off
+             main = &quot;&quot;, # title
+             visible = TRUE, #Supporting calculations
+             colmap = viridis(200) ) # colour pallet
+
+perspPoints(bei, Z = bei.extra$elev, M = fig, pch = 16, cex = 0.5)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-9-3.png" width="768" /></p>
+<p>The extra step of setting <code>visible = TRUE</code> is required for
+overlaying the locations of points on top of a perspective plot. This
+determines which portions of the plot are actually visible, and is then
+passed on to the <code>M</code> argument in <code>plot.im</code>.</p>
+<p>Sometimes you might be interested in visualising a transect of the
+values of a supporting covariate across the sampling window. This can be
+useful way of seeing some of the spatial structure in a covariate. This
+can be achieved via the <code>transect.im()</code> function. Note: by
+default the transect goes from the bottom left of an image, to the top
+right, but this can be modified as needed.</p>
+<pre class="r"><code>plot(transect.im(bei.extra$elev),
+     main = &quot;Elevation Transect&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<p>Other times you might be interested in dividing a continuously
+varying image into discrete bins. The <code>cut.im()</code> function is
+a flexible tool for turning a numeric image into a factor-based image.
+The bin widths are even by default, but can be manually defined to suit
+your needs.</p>
+<pre class="r"><code>plot(cut(bei.extra$elev,
+         3,
+         labels = c(&quot;low&quot;,&quot;medium&quot;,&quot;high&quot;)),
+     main = &quot;Elevation classes&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<p>The data contained in images can also be passed along to other
+functions as needed.</p>
+<pre class="r"><code>par(mfrow = c(1,2))
+hist(bei.extra$elev, main = &quot;&quot;)
+
+hist(cut(bei.extra$elev,
+         3,
+         labels = c(&quot;low&quot;,&quot;medium&quot;,&quot;high&quot;)),
+     main = &quot;&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+</div>
+</div>
+<div id="working-with-point-patterns" class="section level3">
+<h3>Working with point patterns</h3>
+<div id="extracting-information-from-ppp-objects"
+class="section level4">
+<h4>Extracting information from <code>ppp</code> objects</h4>
+<p>The <code>spatstat</code> package has a number of functions for
+extracting basic information from a point pattern. Some of the more
+useful ones are described below</p>
+<pre class="r"><code>#Basic summary information
+summary(vesicles_ppp)</code></pre>
+<pre><code>## Marked planar point pattern:  37 points
+## Average intensity 0.0001336176 points per square unit
+## 
+## Coordinates are given to 5 decimal places
+## 
+## Mark variables: Group, Size
+## Summary:
+##    Group              Size        
+##  Mode :logical   Min.   :0.04873  
+##  FALSE:20        1st Qu.:0.40581  
+##  TRUE :17        Median :0.70139  
+##                  Mean   :1.03771  
+##                  3rd Qu.:1.35817  
+##                  Max.   :3.55886  
+## 
+## Window: polygonal boundary
+## 2 separate polygons (1 hole)
+##                  vertices     area relative.area
+## polygon 1              69 317963.0         1.150
+## polygon 2 (hole)       23 -41052.9        -0.148
+## enclosing rectangle: [22.6796, 586.2292] x [11.9756, 1030.7] units
+##                      (563.5 x 1019 units)
+## Window area = 276910 square units
+## Fraction of frame area: 0.482</code></pre>
+<pre class="r"><code>#Number of points
+npoints(vesicles_ppp)</code></pre>
+<pre><code>## [1] 37</code></pre>
+<pre class="r"><code>#marks
+head(marks(vesicles_ppp))</code></pre>
+<pre><code>##   Group      Size
+## 1 FALSE 0.8441232
+## 2  TRUE 0.2272689
+## 3  TRUE 1.5189706
+## 4 FALSE 0.5883688
+## 5 FALSE 1.9024049
+## 6 FALSE 0.4058069</code></pre>
+<pre class="r"><code>#coordinates
+head(coords(vesicles_ppp))</code></pre>
+<pre><code>##          x        y
+## 1 467.0168 776.0189
+## 2 445.3418 827.4970
+## 3 364.0606 911.4876
+## 4 323.4200 914.1969
+## 5 339.6762 957.5469
+## 6 345.0950 873.5563</code></pre>
+<pre class="r"><code>#Coordinates and mark information
+head(as.data.frame(vesicles_ppp))</code></pre>
+<pre><code>##          x        y Group      Size
+## 1 467.0168 776.0189 FALSE 0.8441232
+## 2 445.3418 827.4970  TRUE 0.2272689
+## 3 364.0606 911.4876  TRUE 1.5189706
+## 4 323.4200 914.1969 FALSE 0.5883688
+## 5 339.6762 957.5469 FALSE 1.9024049
+## 6 345.0950 873.5563 FALSE 0.4058069</code></pre>
+<p>These functions can also be paired with the assign operator
+<code>&lt;-</code> to modify components of a <code>ppp</code> object as
+needed. For instance, change the <code>TRUE</code>/<code>FALSE</code>
+group labels can be done as follows:</p>
+<pre class="r"><code>#Store the marks
+m &lt;- marks(vesicles_ppp)
+
+#Rename as needed
+m$Group[which(m$Group == TRUE)] &lt;- &quot;Active&quot;
+m$Group[which(m$Group == FALSE)] &lt;- &quot;Inactive&quot;
+
+marks(vesicles_ppp) &lt;- m
+
+head(marks(vesicles_ppp))</code></pre>
+<pre><code>##      Group      Size
+## 1 Inactive 0.8441232
+## 2   Active 0.2272689
+## 3   Active 1.5189706
+## 4 Inactive 0.5883688
+## 5 Inactive 1.9024049
+## 6 Inactive 0.4058069</code></pre>
+<pre class="r"><code>plot(vesicles_ppp, which.marks = &quot;Group&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p>This is particularly useful if we calculate values midway through an
+analyses and would like to append them to our <code>ppp</code> object.
+For example, we can use the <code>nndist</code> function to compute the
+distance from each point to its nearest neighbour. We can then visualise
+our point pattern based on this additional information.</p>
+<pre class="r"><code>#Store the marks
+m &lt;- marks(vesicles_ppp)
+
+m$Dist &lt;- nndist(vesicles_ppp)
+
+marks(vesicles_ppp) &lt;- m
+
+head(marks(vesicles_ppp))</code></pre>
+<pre><code>##      Group      Size     Dist
+## 1 Inactive 0.8441232 46.13896
+## 2   Active 0.2272689 55.85516
+## 3   Active 1.5189706 40.73081
+## 4 Inactive 0.5883688 40.73081
+## 5 Inactive 1.9024049 46.29779
+## 6 Inactive 0.4058069 41.35679</code></pre>
+<pre class="r"><code>plot(vesicles_ppp, which.marks = &quot;Dist&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+<p>Point patterns can be subset using normal <code>R</code> data
+wrangling methods like the <code>subset</code> function, or conditional
+statements. For example, we might be interested in performing our
+analyses on the points from the “active” group alone.</p>
+<pre class="r"><code>#Store the marks
+m &lt;- marks(vesicles_ppp)
+
+m$Dist &lt;- nndist(vesicles_ppp)
+
+#Choose points from the &quot;active&quot; group
+active_ves &lt;- vesicles_ppp[marks(vesicles_ppp)[1] == &quot;Active&quot;]
+
+plot(active_ves, use.marks = FALSE, main = &quot;&quot;)</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+</div>
+<div id="working-with-images" class="section level4">
+<h4>Working with images</h4>
+<p>The values contained within images can also be extracted or modified
+as needed. One of the easiest ways is to use the subset index operator
+<code>[]</code>. For example, if we are interested in identifying the
+values of an ‘image’ covariate at the locations where points were
+recorded we could do this as follows:</p>
+<pre class="r"><code>#Elevation at tree locations
+head(bei.extra$elev[bei])</code></pre>
+<pre><code>## [1] 138.32 129.64 135.69 135.86 139.53 139.87</code></pre>
+<p>Similarly, a histogram of the elevation at tree locations compared to
+the elevation across the sampling window is a useful way to visualise
+whether there is any indication of a non-random spatial distribution of
+trees.</p>
+<pre class="r"><code># histogram of elevations at tree locations overlayed on top of a 
+# histogram of elevations within the window
+hist(bei.extra$elev,col=rgb(0,0,1,1/4), main = &quot;&quot;) #blue
+hist(bei.extra$elev[bei], col=rgb(1,0,0,1/2), add = T) # red</code></pre>
+<p><img src="01_spatstat_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+<p>A full list of all of the functions that can be applied to
+<code>spatstat</code> objects is provided in chapter 4 of Baddeley,
+Rubak, &amp; Turner (2015).</p>
+<hr />
+</div>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><p>Baddeley, A., Rubak, E. &amp; Turner, R. (2015). Spatial point
+patterns: methodology and applications with R. CRC press.</p></li>
+<li><p>Khanmohammadi, M., Waagepetersen, R., Nava, N., Nyengaard, J.R.
+and Sporring, J. (2014) Analysing the distribution of synaptic vesicles
+using a spatial point process model. 5th ACM Conference on
+Bioinformatics, Computational Biology and Health Informatics, Newport
+Beach, CA, USA, September 2014.</p></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

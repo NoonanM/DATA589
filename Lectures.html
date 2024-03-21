@@ -13,7 +13,7 @@
 
 <title>Course lectures for DATA 589: Spatial Statistics</title>
 
-<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -29,7 +29,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -328,6 +328,45 @@ div.tocify {
 <li>
   <a href="Lectures.html">Lectures</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Labs
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_spatstat.html">Lab 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives.html">Lab 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_models.html">Lab 03</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Assignments
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_Exercises.html">Assignment 01</a>
+    </li>
+    <li>
+      <a href="02_Descriptives_Assignment.html">Assignment 02</a>
+    </li>
+    <li>
+      <a href="03_PPP_Models_Assignment.html">Assignment 03</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Datasets.html">Datasets</a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -343,22 +382,16 @@ Statistics</h1>
 </div>
 
 
-<p>Lecture slides and recordings for DATA 589: Spatial Statistics,
-2023.</p>
+<p>Lecture slides and recordings for DATA 589: Spatial Statistics.</p>
 <p><br /></p>
 <hr />
-<div id="working-with-spatial-data" class="section level1">
-<h1>Working with Spatial Data</h1>
+<div id="introduction-to-spatial-data" class="section level1">
+<h1>Introduction to Spatial Data</h1>
 <hr />
 <p><br /></p>
 <div id="lecture-01---course-intro" class="section level4">
 <h4>Lecture 01 - Course Intro</h4>
 <p><a href="Lectures/01_Intro.pdf" target="_blank">Slides.</a></p>
-<!-- <a href="" target="_blank">Recording.</a> -->
-</div>
-<div id="lecture-02---working-with-spatial-data" class="section level4">
-<h4>Lecture 02 - Working with Spatial Data</h4>
-<!-- <a href="Lectures/02_Scope_of_Evol_Ecol.pdf" target="_blank">Slides.</a> -->
 <!-- <a href="" target="_blank">Recording.</a> -->
 <hr />
 </div>
@@ -367,20 +400,25 @@ Statistics</h1>
 <h1>Point Processes</h1>
 <hr />
 <p><br /></p>
-<div id="lecture-03---point-processes-1-spatial-intensity"
+<div id="lecture-02---spatial-intensity" class="section level4">
+<h4>Lecture 02 - Spatial Intensity</h4>
+<p><a href="Lectures/02_Point_Process_Intro.pdf" target="_blank">Slides.</a></p>
+<!-- <a href="" target="_blank">Recording.</a> -->
+</div>
+<div id="lecture-03---spatial-correlations" class="section level4">
+<h4>Lecture 03 - Spatial Correlations</h4>
+<p><a href="Lectures/03_Point_Processes_2_Correlations.pdf" target="_blank">Slides.</a></p>
+<!-- <a href="" target="_blank">Recording.</a> -->
+</div>
+<div id="lecture-04---poisson-point-processes" class="section level4">
+<h4>Lecture 04 - Poisson Point Processes</h4>
+<p><a href="Lectures/04_PP_3_Poisson_Models.pdf" target="_blank">Slides.</a></p>
+<!-- <a href="" target="_blank">Recording.</a> -->
+</div>
+<div id="lecture-05---poisson-point-processes-model-validation"
 class="section level4">
-<h4>Lecture 03 - Point Processes 1: Spatial Intensity</h4>
-<p><a href="Lectures/03_Point_Process_Intro.pdf" target="_blank">Slides.</a></p>
-<!-- <a href="" target="_blank">Recording.</a> -->
-</div>
-<div id="lecture-04---point-processes-2" class="section level4">
-<h4>Lecture 04 - Point Processes 2</h4>
-<!-- <a href="Lectures/03_Selection_Adaptation.pdf" target="_blank">Slides.</a> -->
-<!-- <a href="" target="_blank">Recording.</a> -->
-</div>
-<div id="lecture-05---point-processes-3" class="section level4">
-<h4>Lecture 05 - Point Processes 3</h4>
-<!-- <a href="Lectures/03_Selection_Adaptation.pdf" target="_blank">Slides.</a> -->
+<h4>Lecture 05 - Poisson Point Processes Model Validation</h4>
+<p><a href="Lectures/05_PP_4_Model_Validation.pdf" target="_blank">Slides.</a></p>
 <!-- <a href="" target="_blank">Recording.</a> -->
 <p><br /></p>
 <hr />
@@ -390,21 +428,18 @@ class="section level4">
 <h1>Spatial Autocorrelation</h1>
 <hr />
 <p><br /></p>
-<div id="lecture-06---spatial-autocorrelation-1-variograms"
-class="section level4">
-<h4>Lecture 06 - Spatial Autocorrelation 1: Variograms</h4>
+<div id="lecture-06---variograms" class="section level4">
+<h4>Lecture 06 - Variograms</h4>
 <p><a href="Lectures/06_Spatial_Autocorrelation.pdf" target="_blank">Slides.</a></p>
 <!-- <a href="" target="_blank">Recording.</a> -->
 </div>
-<div id="lecture-07---spatial-autocorrelation-2-kriging"
-class="section level4">
-<h4>Lecture 07 - Spatial Autocorrelation 2: Kriging</h4>
+<div id="lecture-07---kriging" class="section level4">
+<h4>Lecture 07 - Kriging</h4>
 <p><a href="Lectures/07_Kriging.pdf" target="_blank">Slides.</a></p>
 <!-- <a href="" target="_blank">Recording.</a> -->
 </div>
-<div id="lecture-08---spatial-autocorrelation-3-kriging-with-covariates"
-class="section level4">
-<h4>Lecture 08 - Spatial Autocorrelation 3: Kriging with covariates</h4>
+<div id="lecture-08---kriging-with-covariates" class="section level4">
+<h4>Lecture 08 - Kriging with covariates</h4>
 <p><a href="Lectures/08_coKriging.pdf" target="_blank">Slides.</a></p>
 <!-- <a href="" target="_blank">Recording.</a> -->
 <p><br /></p>
