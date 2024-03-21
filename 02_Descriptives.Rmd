@@ -496,7 +496,7 @@ Ripley's $K$-function provides information on whether their are significant devi
 
 </br>
 <center>
-$g(r) = \frac{{K}(r)\prime}{2 \pi r}$
+$g(r) = \frac{K(r)\prime}{2 \pi r}$
 </center>
 </br>
 
