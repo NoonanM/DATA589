@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=8, fig.height=6)
 ```
 
 ```{r, echo = FALSE}
-setwd("~/Dropbox/UBC/Teaching_Material/DATA_589/Labs/02_descriptives")
+#setwd("~/Dropbox/UBC/Teaching_Material/DATA_589/Labs/02_descriptives")
 ```
 
 * * *
