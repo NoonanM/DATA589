@@ -20,7 +20,7 @@ Lecture slides and recordings for DATA 589: Spatial Statistics.
 
 <a href="Lectures/01_Intro.pdf" target="_blank">Slides.</a>
 
-<!-- <a href="" target="_blank">Recording.</a> -->
+<a href="https://ubc.zoom.us/rec/share/TeU6bSi6WnB9A3W9V-EtU7DaIltc8KtljhNsI2wB3qPk8vziQm2LLdear6dVHtLV.GPhkZkF8GYsxZUel" target="_blank">Recording.</a>
 
 
 
