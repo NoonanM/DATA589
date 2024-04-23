@@ -76,6 +76,6 @@ Lecture slides and recordings for DATA 589: Spatial Statistics.
 
 <a href="Lectures/08_coKriging.pdf" target="_blank">Slides.</a>
 
-<!-- <a href="" target="_blank">Recording.</a> -->
+<a href="https://ubc.zoom.us/rec/share/uIpKBzYL2XpBy_GIhCa-qeiAoRk719rXPGsp1ZVnQp0q8UifaBm8_0Ge2bywEohd.FaNoBr9qPajUd4in" target="_blank">Recording.</a>
 
 <br />

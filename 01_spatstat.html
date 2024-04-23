@@ -681,12 +681,12 @@ summary(vesicles_ppp)</code></pre>
 ## Mark variables: Group, Size
 ## Summary:
 ##    Group              Size         
-##  Mode :logical   Min.   :0.002141  
-##  FALSE:22        1st Qu.:0.349216  
-##  TRUE :15        Median :0.645336  
-##                  Mean   :1.009567  
-##                  3rd Qu.:1.381365  
-##                  Max.   :4.340074  
+##  Mode :logical   Min.   :0.009485  
+##  FALSE:18        1st Qu.:0.182279  
+##  TRUE :19        Median :0.550348  
+##                  Mean   :0.748652  
+##                  3rd Qu.:1.041947  
+##                  Max.   :2.864741  
 ## 
 ## Window: polygonal boundary
 ## 2 separate polygons (1 hole)
@@ -703,12 +703,12 @@ npoints(vesicles_ppp)</code></pre>
 <pre class="r"><code>#marks
 head(marks(vesicles_ppp))</code></pre>
 <pre><code>##   Group      Size
-## 1  TRUE 1.8819110
-## 2  TRUE 0.1348912
-## 3  TRUE 2.6592318
-## 4 FALSE 0.5429400
-## 5 FALSE 0.2027415
-## 6  TRUE 1.6691753</code></pre>
+## 1 FALSE 0.0687878
+## 2  TRUE 0.5178509
+## 3 FALSE 0.2893958
+## 4  TRUE 0.1160360
+## 5  TRUE 0.1408090
+## 6 FALSE 0.5503479</code></pre>
 <pre class="r"><code>#coordinates
 head(coords(vesicles_ppp))</code></pre>
 <pre><code>##          x        y
@@ -721,12 +721,12 @@ head(coords(vesicles_ppp))</code></pre>
 <pre class="r"><code>#Coordinates and mark information
 head(as.data.frame(vesicles_ppp))</code></pre>
 <pre><code>##          x        y Group      Size
-## 1 467.0168 776.0189  TRUE 1.8819110
-## 2 445.3418 827.4970  TRUE 0.1348912
-## 3 364.0606 911.4876  TRUE 2.6592318
-## 4 323.4200 914.1969 FALSE 0.5429400
-## 5 339.6762 957.5469 FALSE 0.2027415
-## 6 345.0950 873.5563  TRUE 1.6691753</code></pre>
+## 1 467.0168 776.0189 FALSE 0.0687878
+## 2 445.3418 827.4970  TRUE 0.5178509
+## 3 364.0606 911.4876 FALSE 0.2893958
+## 4 323.4200 914.1969  TRUE 0.1160360
+## 5 339.6762 957.5469  TRUE 0.1408090
+## 6 345.0950 873.5563 FALSE 0.5503479</code></pre>
 <p>These functions can also be paired with the assign operator
 <code>&lt;-</code> to modify components of a <code>ppp</code> object as
 needed. For instance, change the <code>TRUE</code>/<code>FALSE</code>
@@ -742,12 +742,12 @@ marks(vesicles_ppp) &lt;- m
 
 head(marks(vesicles_ppp))</code></pre>
 <pre><code>##      Group      Size
-## 1   Active 1.8819110
-## 2   Active 0.1348912
-## 3   Active 2.6592318
-## 4 Inactive 0.5429400
-## 5 Inactive 0.2027415
-## 6   Active 1.6691753</code></pre>
+## 1 Inactive 0.0687878
+## 2   Active 0.5178509
+## 3 Inactive 0.2893958
+## 4   Active 0.1160360
+## 5   Active 0.1408090
+## 6 Inactive 0.5503479</code></pre>
 <pre class="r"><code>plot(vesicles_ppp, which.marks = &quot;Group&quot;)</code></pre>
 <p><img src="01_spatstat_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
 <p>This is particularly useful if we calculate values midway through an
@@ -764,12 +764,12 @@ marks(vesicles_ppp) &lt;- m
 
 head(marks(vesicles_ppp))</code></pre>
 <pre><code>##      Group      Size     Dist
-## 1   Active 1.8819110 46.13896
-## 2   Active 0.1348912 55.85516
-## 3   Active 2.6592318 40.73081
-## 4 Inactive 0.5429400 40.73081
-## 5 Inactive 0.2027415 46.29779
-## 6   Active 1.6691753 41.35679</code></pre>
+## 1 Inactive 0.0687878 46.13896
+## 2   Active 0.5178509 55.85516
+## 3 Inactive 0.2893958 40.73081
+## 4   Active 0.1160360 40.73081
+## 5   Active 0.1408090 46.29779
+## 6 Inactive 0.5503479 41.35679</code></pre>
 <pre class="r"><code>plot(vesicles_ppp, which.marks = &quot;Dist&quot;)</code></pre>
 <p><img src="01_spatstat_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
 <p>Point patterns can be subset using normal <code>R</code> data
