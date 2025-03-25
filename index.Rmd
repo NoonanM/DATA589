@@ -54,26 +54,26 @@ The assignments and evaluation for this course are structured along two distinct
 
 |                                    |      |                                           |
 |------------------------------------|------|-------------------------------------------|
-| Practical assignments                              | 40%  | Due on a ca. a weekly basis                                   |
-| Group Project                    | 30%  | Due at the end of the final week  |
-| Final Exam      | 30%  |  In-class during the final week |
+| Practical assignments                              | 39%  | Due on a ca. a weekly basis                                   |
+| Group Project                    | 30%  | In-class during the final week  |
+| Final Exam      | 31%  |  In-class during the final week |
 | Total                              | 100% |                                           |
 
-### Practical Assignments (40%)
-During the lab sessions, students will be guided through applied practicals. They will then be asked to complete in-class assignments based on the day's lab. There will be a total of 3-4 practicals to be completed throughout the course (i.e., one due at the end of each lab day). Each is designed to provide students with the opportunity to learn how to apply the methods learned in the lectures and labs to novel datasets using tools implemented in the statistical software `R`. The purpose of these lab assignments is to ensure that students have the skills necessary to complete effective statistical analyses that are central to problems involving spatial data. The skills gained by completing each week’s assignment will also help students prepare for the final exam. GitHub and Canvas will host the labs, assignments, and the various datasets.
+### Practical Assignments (39%)
+During the lab sessions, students will be guided through applied practicals. They will then be asked to complete in-class assignments based on the day's lab. There will be a total of 3 practicals to be completed throughout the course (i.e., one due on the Monday following the lab). Each is designed to provide students with the opportunity to learn how to apply the methods learned in the lectures and labs to novel datasets using tools implemented in the statistical software `R`. The purpose of these lab assignments is to ensure that students have the skills necessary to complete effective statistical analyses that are central to problems involving spatial data. The skills gained by completing each week’s assignment will also help students prepare for the final exam and project. GitHub and Canvas will host the labs, assignments, and the various datasets.
 
-__Grading__: Students are to upload answers to all questions in the lab assignments to canvas prior to leaving the lab. Each lab assignment is worth a total of 10% of your total grade with some points coming from answering the questions correctly, and some from the cleanliness and documentation of your code. Assignments are to be completed alone. You can use handwritten notes, lecture slides, and the guided lab practical to help you during the assignment. Solutions to each of the lab assignments will be posted after the submission deadline. Because some lines of code can be slow to run, the time limit for submission is based on the time you start knitting your RMarkdown files. Late assignments will receive a 10% late penalty.
+__Grading__: Each lab assignment is worth a total of 13\% of your total grade with some points coming from answering the questions correctly, and some from the cleanliness and documentation of your code. Late assignments will be penalised at a rate of 5\% per day.
 
 ### Group Projects (30%)
-Working in groups of 3, students will be required to complete a data analysis assignment. This assignment is designed to provide students with an opportunity to apply what they have learned in the lectures and labs in an unguided format as they would if they were analysing spatial point data outside of a classroom setting. For this project, students will apply the modelling tools covered in the lectures on an empirical dataset (details below) and write a short report about their work on these data and summarise their findings. This report should be comprised of five sections: Introduction, Methods, Results, Discussion, References.
+Working in groups of 3-4, students will be required to complete a data analysis assignment. This assignment is designed to provide students with an opportunity to apply what they have learned in the lectures and labs in an unguided format as they would if they were analysing spatial point data outside of a classroom setting. For this project, students will apply the modelling tools covered in the lectures on an empirical dataset (details below) and give a short presentation about their work on these data that summarises their findings. This presentation should be comprised of five sections: Introduction, Methods, Results, Discussion, References.
 
-_Introduction_: Provide a brief description of the study system from which the data come and an outline of what questions you intend on exploring with the data, citing any relevant literature. Length: ca. 1 page.
+_Introduction_: Provide a brief description of the study system from which the data come and an outline of what questions you intend on exploring with the data, citing any relevant literature.
 
-_Methods_: Briefly describe the data and what variables are included. Provide a detailed description of the analytical workflow that was applied to the data, citing any relevant literature and statistical packages employed. There should be enough information that anyone can reproduce the workflow if they had access to the data. Length: As long as necessary.
+_Methods_: Briefly describe the data and what variables are included. Provide a detailed description of the analytical workflow that was applied to the data, citing any relevant literature and statistical packages employed. There should be enough information that anyone can reproduce the workflow if they had access to the data.
 
-_Results_: Describe your statistical findings. Tables and figures should be used throughout. Length: As long as necessary.
+_Results_: Describe your statistical findings. Tables and figures should be used throughout.
 
-_Discussion_: Provide a brief summary of your findings. Length: ca. 1 page.
+_Discussion_: Provide a brief summary of your findings.
 
 _References_: Include references to all necessary literature.
 
@@ -82,10 +82,10 @@ In addition, students are to create a GitHub repository for their project where 
  
 __Datasets__: To complete these assignments, each group much select a species of their choosing and download the occurrence records from the Global Biodiversity Information Facility (GBIF) data repository (https://www.gbif.org/Links to an external site.). The species must be found in British Columbia. Groups will be provided provided with a set of environmental variables, and must use these to describe trends in the observed point data.
 
-__Grading__: Groups are to submit their reports by the end of the day on April 28th. Reports will be graded out of 100, and will be worth a total of 30% of your total grade. Each section has the following value: Introduction 5%, Methods 30%, Results 30%, Discussion 5%, References 5%, and the GitHub repository 25%. Late reports will not be accepted without a valid excuse.
+__Grading__: Presentations will be graded out of 100, with 75% based on the pre-provided rubric, and the GitHub repository worth an additional 25%.
 
 
-### Final Exam (30%)
+### Final Exam (31%)
 
 The final exam will consist of a set of question designed to assess students' understanding of the core concepts covered in the course. The exam will be comprehensive, and any material covered in the lectures and labs will be testable.
 
@@ -98,8 +98,8 @@ Note: Final grades may be subject to scaling based on departmental policies.
 
 | Week        | Lecture Topics                                                                        | Practical Assignment                                                                                     |
 |-------------------|---------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| 1      | 	Course introduction; Spatial Intensity                                             | No Lab                                           |
-| 2     | 	Spatial Correlations; Poisson Point Process Models                                    | Lab 01: Working with spatial data |
-| 3     | Point Process Model Validation            | Lab 02: Spatial patterns                                                 |
-| 4  | Spatial Autocorrelation; Variograms; Kriging                          | Lab 03: Point process models                              |
-| 5 | 	Kriging with Covariates                          | Research project due                              |
+| 1      | 	Course introduction; Spatial Intensity                                             | Lab 01: Introduction to the spatstat package                                           |
+| 2     | 	Spatial Correlations; Poisson Point Process Models                                    | Lab 02: Exploratory Data Analysis |
+| 3     | Point Process Model Validation            | Lab 03: Fitting and Validating Poisson Point Process Models                                                 |
+| 4  | Spatial Autocorrelation; Variograms; Kriging                          | No Lab                              |
+| 5 | 	Kriging with Covariates                          | Lab time used for presentations                              |
